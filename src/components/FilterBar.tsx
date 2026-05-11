@@ -73,95 +73,116 @@ export function FilterBar({ filters, setFilters, reset, entries, resultCount }: 
     (filters.query ? 1 : 0);
 
   const content = (
-    <div className="flex flex-col gap-4">
-      <div className="relative">
-        <Search
-          size={16}
-          className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted"
-        />
-        <input
-          type="search"
-          value={filters.query}
-          onChange={(e) => setFilters({ ...filters, query: e.target.value })}
-          placeholder="ara: KYB, sepet, v1.1.7…"
-          className="input-base pl-10"
-        />
-        {filters.query && (
+    <div className="flex flex-col gap-3">
+      {/* Search + count + actions — single horizontal row */}
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="relative min-w-0 flex-1 basis-full sm:basis-auto">
+          <Search
+            size={14}
+            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
+          />
+          <input
+            type="search"
+            value={filters.query}
+            onChange={(e) => setFilters({ ...filters, query: e.target.value })}
+            placeholder="ara: KYB, sepet, v1.1.7…"
+            className="input-base !py-2 !pl-9 !pr-9 !text-[13px]"
+          />
+          {filters.query && (
+            <button
+              type="button"
+              onClick={() => setFilters({ ...filters, query: "" })}
+              aria-label="Aramayı temizle"
+              className="icon-btn absolute right-1 top-1/2 -translate-y-1/2 !p-1.5"
+            >
+              <X size={12} />
+            </button>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <span
+            className="text-[12.5px] text-ink-2 tabular-nums whitespace-nowrap"
+            aria-live="polite"
+          >
+            <span className="font-semibold text-ink">{resultCount}</span>{" "}
+            <span className="text-muted">kayıt</span>
+            {activeFilterCount > 0 && (
+              <span className="ml-1.5 text-muted">· {activeFilterCount} filtre</span>
+            )}
+          </span>
           <button
             type="button"
-            onClick={() => setFilters({ ...filters, query: "" })}
-            aria-label="Aramayı temizle"
-            className="icon-btn absolute right-2 top-1/2 -translate-y-1/2"
+            onClick={copyLink}
+            className="icon-btn"
+            title="Bağlantıyı kopyala"
+            aria-label="Bağlantıyı kopyala"
           >
-            <X size={14} />
-          </button>
-        )}
-      </div>
-
-      <ChipRow
-        label="Modül"
-        values={SOURCES}
-        selected={filters.sources}
-        counts={counts.sources}
-        labelFn={(s) => SOURCE_LABELS[s]}
-        onToggle={(s) => setFilters({ ...filters, sources: toggleSet(filters.sources, s) })}
-      />
-      <ChipRow
-        label="Tip"
-        values={TYPES}
-        selected={filters.types}
-        counts={counts.types}
-        labelFn={(t) => TYPE_LABELS[t]}
-        onToggle={(t) => setFilters({ ...filters, types: toggleSet(filters.types, t) })}
-      />
-      <ChipRow
-        label="Ortam"
-        values={ENVS}
-        selected={filters.environments}
-        counts={counts.envs}
-        labelFn={(e) => ENV_LABELS[e]}
-        onToggle={(e) =>
-          setFilters({ ...filters, environments: toggleSet(filters.environments, e) })
-        }
-      />
-
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="eyebrow w-14 shrink-0">Tarih</span>
-        <div className="flex flex-wrap gap-1.5">
-          {DATE_PRESETS.map((p) => (
-            <button
-              key={p.key}
-              type="button"
-              onClick={() => applyPreset(p.key, p.days)}
-              className={activePresetKey === p.key ? "chip-base chip-active" : "chip-base"}
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
-        <span className="text-[13px] text-ink-2" aria-live="polite">
-          <span className="font-semibold text-ink">{resultCount}</span> kayıt
-          {activeFilterCount > 0 && (
-            <span className="ml-2 text-muted">· {activeFilterCount} filtre aktif</span>
-          )}
-        </span>
-        <div className="flex gap-2">
-          <button type="button" onClick={copyLink} className="btn-ghost" title="Bağlantıyı kopyala">
             <LinkIcon size={14} />
-            <span className="hidden sm:inline">Paylaş</span>
           </button>
           <button
             type="button"
             onClick={handleReset}
             disabled={activeFilterCount === 0}
-            className="btn-ghost disabled:cursor-not-allowed disabled:opacity-50"
+            className="icon-btn disabled:cursor-not-allowed disabled:opacity-40"
+            title="Filtreleri sıfırla"
+            aria-label="Filtreleri sıfırla"
           >
             <RotateCcw size={14} />
-            <span className="hidden sm:inline">Sıfırla</span>
           </button>
+        </div>
+      </div>
+
+      {/* Compact filter rows */}
+      <div className="flex flex-col gap-2 border-t border-border pt-3">
+        <DimensionRow
+          label="Modül"
+          values={SOURCES}
+          selected={filters.sources}
+          counts={counts.sources}
+          allCount={SOURCES.length}
+          labelFn={(s) => SOURCE_LABELS[s]}
+          onToggle={(s) => setFilters({ ...filters, sources: toggleSet(filters.sources, s) })}
+        />
+        <DimensionRow
+          label="Tip"
+          values={TYPES}
+          selected={filters.types}
+          counts={counts.types}
+          allCount={TYPES.length}
+          labelFn={(t) => TYPE_LABELS[t]}
+          onToggle={(t) => setFilters({ ...filters, types: toggleSet(filters.types, t) })}
+        />
+        <DimensionRow
+          label="Ortam"
+          values={ENVS}
+          selected={filters.environments}
+          counts={counts.envs}
+          allCount={ENVS.length}
+          labelFn={(e) => ENV_LABELS[e]}
+          onToggle={(e) =>
+            setFilters({ ...filters, environments: toggleSet(filters.environments, e) })
+          }
+        />
+
+        {/* Date presets */}
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="mini-label">Tarih</span>
+          <div className="flex flex-wrap gap-1">
+            {DATE_PRESETS.map((p) => (
+              <button
+                key={p.key}
+                type="button"
+                onClick={() => applyPreset(p.key, p.days)}
+                className={
+                  activePresetKey === p.key
+                    ? "mini-chip mini-chip-active"
+                    : "mini-chip mini-chip-neutral"
+                }
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -169,15 +190,16 @@ export function FilterBar({ filters, setFilters, reset, entries, resultCount }: 
 
   return (
     <>
+      {/* Mobile collapsed bar */}
       <div className="sticky top-[57px] z-20 border-b border-border bg-canvas/85 backdrop-blur-md sm:hidden">
         <div className="flex items-center gap-2 px-4 py-2.5">
           <button
             type="button"
             onClick={() => setOpenMobile((o) => !o)}
-            className="btn-ghost flex-1 justify-center"
+            className="btn-ghost flex-1 justify-center !py-2 !text-[12.5px]"
             aria-expanded={openMobile}
           >
-            <SlidersHorizontal size={14} />
+            <SlidersHorizontal size={13} />
             <span>Filtreler</span>
             {activeFilterCount > 0 && (
               <span className="ml-1 rounded-full bg-brand px-1.5 py-0.5 text-[10px] font-bold text-[#1a1a1a]">
@@ -185,55 +207,65 @@ export function FilterBar({ filters, setFilters, reset, entries, resultCount }: 
               </span>
             )}
           </button>
-          <span className="rounded-md bg-surface-2 px-2.5 py-1.5 font-mono text-[12px] font-medium text-ink">
+          <span className="rounded-md bg-surface-2 px-2.5 py-1.5 font-mono text-[12px] font-medium text-ink tabular-nums">
             {resultCount}
           </span>
         </div>
         {openMobile && (
-          <div className="border-t border-border bg-surface px-4 py-4">{content}</div>
+          <div className="border-t border-border bg-surface px-4 py-3">{content}</div>
         )}
       </div>
 
+      {/* Desktop sticky bar */}
       <aside className="sticky top-[73px] z-20 hidden border-b border-border bg-canvas/85 backdrop-blur-md sm:block">
-        <div className="mx-auto max-w-6xl px-6 py-4">{content}</div>
+        <div className="mx-auto max-w-6xl px-6 py-3">{content}</div>
       </aside>
     </>
   );
 }
 
-interface ChipRowProps<T extends string> {
+interface DimRowProps<T extends string> {
   label: string;
   values: readonly T[];
   selected: Set<T>;
   counts: Record<string, number>;
+  allCount: number;
   labelFn: (v: T) => string;
   onToggle: (v: T) => void;
 }
 
-function ChipRow<T extends string>({
+function DimensionRow<T extends string>({
   label,
   values,
   selected,
   counts,
+  allCount,
   labelFn,
   onToggle,
-}: ChipRowProps<T>) {
+}: DimRowProps<T>) {
+  const isFiltered = selected.size > 0 && selected.size < allCount;
+
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="eyebrow w-14 shrink-0">{label}</span>
-      <div className="flex flex-wrap gap-1.5">
+    <div className="flex flex-wrap items-center gap-1.5">
+      <span className="mini-label">{label}</span>
+      <div className="flex flex-wrap gap-1">
         {values.map((v) => {
-          const active = selected.has(v);
+          const included = selected.has(v);
+          const cls = !isFiltered
+            ? "mini-chip mini-chip-neutral"
+            : included
+              ? "mini-chip mini-chip-active"
+              : "mini-chip mini-chip-muted";
           return (
             <button
               key={v}
               type="button"
               onClick={() => onToggle(v)}
-              aria-pressed={active}
-              className={active ? "chip-base chip-active" : "chip-base"}
+              aria-pressed={included}
+              className={cls}
             >
-              {labelFn(v)}
-              <span className={active ? "opacity-80" : "text-muted"}>({counts[v] ?? 0})</span>
+              <span>{labelFn(v)}</span>
+              <span className="opacity-60 tabular-nums text-[10.5px]">{counts[v] ?? 0}</span>
             </button>
           );
         })}
