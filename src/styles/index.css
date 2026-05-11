@@ -452,6 +452,25 @@ body {
   font-weight: 600;
 }
 
+@utility author-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px 2px 6px;
+  border-radius: 9999px;
+  background: var(--surface-2-rt);
+  border: 1px solid var(--border-rt);
+  color: var(--ink-2-rt);
+  text-decoration: none;
+  transition: all 0.12s ease;
+  white-space: nowrap;
+  line-height: 1.4;
+  width: max-content;
+  max-width: 100%;
+}
+
 /* ─── COMPLEX STATE STYLES (not @utility — use direct CSS) ──────── */
 
 .btn-primary:hover { filter: brightness(0.97); }
@@ -510,4 +529,10 @@ body {
   filter: brightness(0.97);
   color: #1a1a1a;
   border-color: var(--color-brand-700);
+}
+
+.author-chip:hover {
+  background: var(--color-brand-50);
+  border-color: var(--color-brand-700);
+  color: var(--ink-rt);
 }
