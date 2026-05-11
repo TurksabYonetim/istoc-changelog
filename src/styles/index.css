@@ -1,30 +1,328 @@
 @import "tailwindcss";
 
+/* ─── DESIGN TOKENS (per design.md) ─────────────────────────────── */
+
 @theme {
-  --color-brand-50: #fff7ed;
-  --color-brand-100: #ffedd5;
-  --color-brand-500: #f59e0b;
-  --color-brand-600: #d97706;
-  --color-brand-700: #b45309;
+  /* Static brand colors (constant across all themes) */
+  --color-brand: #f5b800;
+  --color-brand-700: #d39c00;
+  --color-brand-50: #fff8e1;
 
-  --color-env-prod: #16a34a;
-  --color-env-rc: #f97316;
-  --color-env-beta: #eab308;
+  /* Semantic colors (constant) */
+  --color-ok: #1f7a4d;
+  --color-warn: #b54708;
+  --color-danger: #b42318;
 
-  --color-type-added: #16a34a;
-  --color-type-fixed: #f97316;
-  --color-type-changed: #3b82f6;
+  /* Theme-driven colors — exposed to Tailwind utilities via runtime vars */
+  --color-canvas: var(--canvas-rt);
+  --color-surface: var(--surface-rt);
+  --color-surface-2: var(--surface-2-rt);
+  --color-border: var(--border-rt);
+  --color-border-strong: var(--border-strong-rt);
+  --color-ink: var(--ink-rt);
+  --color-ink-2: var(--ink-2-rt);
+  --color-muted: var(--muted-rt);
+  --color-ok-bg: var(--ok-bg-rt);
+  --color-warn-bg: var(--warn-bg-rt);
 
-  --font-display: "Inter", system-ui, -apple-system, sans-serif;
+  /* Type families */
+  --font-sans: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    system-ui, sans-serif;
+  --font-serif: "Fraunces", "Source Serif Pro", Georgia, serif;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(20, 20, 18, 0.04);
+  --shadow: 0 2px 6px rgba(20, 20, 18, 0.06), 0 1px 2px rgba(20, 20, 18, 0.04);
+  --shadow-lg: 0 24px 60px -12px rgba(20, 20, 18, 0.18),
+    0 8px 20px -6px rgba(20, 20, 18, 0.08);
+  --shadow-brand: 0 4px 14px rgba(213, 156, 0, 0.08);
+  --shadow-brand-lg: 0 8px 24px rgba(213, 156, 0, 0.14);
 }
 
-@variant dark (&:where(.dark, .dark *));
+/* ─── LIGHT THEME (default) ─────────────────────────────────────── */
+:root,
+:root[data-theme="light"] {
+  --canvas-rt: #f7f7f5;
+  --surface-rt: #ffffff;
+  --surface-2-rt: #fafaf8;
+  --border-rt: #e8e6e0;
+  --border-strong-rt: #d5d2c9;
+  --ink-rt: #1a1a1a;
+  --ink-2-rt: #4a4a48;
+  --muted-rt: #8a877f;
+  --ok-bg-rt: #e8f5ed;
+  --warn-bg-rt: #fff4e5;
+  color-scheme: light;
+}
 
+/* ─── DARK THEME ────────────────────────────────────────────────── */
+:root[data-theme="dark"] {
+  --canvas-rt: #0f0f0e;
+  --surface-rt: #1a1a18;
+  --surface-2-rt: #232220;
+  --border-rt: #2e2c28;
+  --border-strong-rt: #403d37;
+  --ink-rt: #f0eee8;
+  --ink-2-rt: #c9c6bd;
+  --muted-rt: #88857c;
+  --ok-bg-rt: #0f2a1f;
+  --warn-bg-rt: #2a1f10;
+  color-scheme: dark;
+}
+
+/* ─── BRAND THEME ───────────────────────────────────────────────── */
+:root[data-theme="brand"] {
+  --canvas-rt: #fbf6e8;
+  --surface-rt: #ffffff;
+  --surface-2-rt: #fff8e1;
+  --border-rt: #ecd99a;
+  --border-strong-rt: #d6bf6c;
+  --ink-rt: #1a1a1a;
+  --ink-2-rt: #4a4a48;
+  --muted-rt: #8a877f;
+  --ok-bg-rt: #e8f5ed;
+  --warn-bg-rt: #fff4e5;
+  color-scheme: light;
+}
+
+/* ─── BASE ──────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-display);
+  background: var(--canvas-rt);
+  color: var(--ink-rt);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01", "ss03";
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  min-height: 100dvh;
 }
+
+::selection {
+  background: var(--color-brand);
+  color: #1a1a1a;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong-rt) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong-rt);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* ─── COMPONENT UTILITIES (per design.md §3) ────────────────────── */
+
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-brand);
+  color: #1a1a1a;
+  border: 1px solid var(--color-brand-700);
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  box-shadow: var(--shadow-sm);
+  transition: filter 0.15s ease, transform 0.1s ease;
+  cursor: pointer;
+}
+
+@utility btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--ink-rt);
+  border: 1px solid var(--border-rt);
+  font-weight: 500;
+  font-size: 13.5px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+}
+
+@utility link-btn {
+  background: transparent;
+  border: 0;
+  color: var(--ink-rt);
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+@utility icon-btn {
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--ink-2-rt);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+@utility chip-base {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-rt);
+  background: var(--surface-rt);
+  color: var(--ink-2-rt);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+@utility chip-active {
+  background: var(--color-brand);
+  color: #1a1a1a;
+  border-color: var(--color-brand-700);
+  font-weight: 600;
+}
+
+@utility pill-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  color: var(--color-ok);
+  background: var(--color-ok-bg);
+  border: 1px solid rgba(31, 122, 77, 0.3);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+@utility pill-warn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  color: var(--color-warn);
+  background: var(--color-warn-bg);
+  border: 1px solid rgba(181, 71, 8, 0.3);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+@utility pill-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  color: var(--ink-2-rt);
+  background: var(--surface-2-rt);
+  border: 1px solid var(--border-rt);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+@utility pill-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  color: #1a1a1a;
+  background: var(--color-brand);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@utility eyebrow {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-brand-700);
+}
+
+@utility card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+@utility input-base {
+  width: 100%;
+  background: var(--surface-rt);
+  border: 1px solid var(--border-rt);
+  border-radius: 12px;
+  color: var(--ink-rt);
+  font-size: 14px;
+  font-family: var(--font-sans);
+  padding: 10px 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* ─── COMPLEX STATE STYLES (not @utility — use direct CSS) ──────── */
+
+.btn-primary:hover { filter: brightness(0.97); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btn-ghost:hover { background: var(--surface-2-rt); border-color: var(--border-strong-rt); }
+
+.link-btn:hover { color: var(--color-brand-700); }
+:root[data-theme="dark"] .link-btn:hover { color: var(--color-brand); }
+
+.icon-btn:hover { background: var(--surface-2-rt); color: var(--ink-rt); }
+
+.chip-base:hover { border-color: var(--border-strong-rt); color: var(--ink-rt); }
+
+.chip-active:hover { filter: brightness(0.97); color: #1a1a1a; border-color: var(--color-brand-700); }
+
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-brand-lg);
+  border-color: var(--border-strong-rt);
+}
+
+.input-base::placeholder { color: var(--muted-rt); }
+.input-base:focus {
+  outline: none;
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px rgba(245, 184, 0, 0.18);
+}
+
+:root[data-theme="dark"] .eyebrow { color: var(--color-brand); }

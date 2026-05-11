@@ -7,16 +7,14 @@ interface Props {
 
 export function Timeline({ entries }: Props) {
   return (
-    <div className="relative">
-      <span
-        aria-hidden
-        className="absolute left-[15px] top-2 bottom-2 w-px bg-zinc-200 dark:bg-zinc-800"
-      />
-      <div className="space-y-4">
-        {entries.map((entry, idx) => (
-          <VersionCard key={`${entry.source}-${entry.version}`} entry={entry} defaultOpen={idx < 3} />
-        ))}
-      </div>
+    <div className="flex flex-col gap-3">
+      {entries.map((entry, idx) => (
+        <VersionCard
+          key={`${entry.source}-${entry.version}`}
+          entry={entry}
+          defaultOpen={idx < 2}
+        />
+      ))}
     </div>
   );
 }

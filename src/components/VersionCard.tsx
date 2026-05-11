@@ -1,110 +1,101 @@
-import { ChevronDown, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { ChevronDown } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import type { ChangelogEntry } from "../types/changelog";
+import type { ChangelogEntry, ChangeType } from "../types/changelog";
 import { formatDate, isRecent } from "../lib/format";
 import { ChangeItem } from "./ChangeItem";
-
-const ENV_DOT: Record<ChangelogEntry["environment"], string> = {
-  PROD: "bg-[var(--color-env-prod)]",
-  RC: "bg-[var(--color-env-rc)]",
-  BETA: "bg-[var(--color-env-beta)]",
-};
-
-const ENV_TEXT: Record<ChangelogEntry["environment"], string> = {
-  PROD: "text-[var(--color-env-prod)]",
-  RC: "text-[var(--color-env-rc)]",
-  BETA: "text-[var(--color-env-beta)]",
-};
 
 interface Props {
   entry: ChangelogEntry;
   defaultOpen?: boolean;
 }
 
+const COUNT_CONFIG: Record<ChangeType, { label: string; cls: string }> = {
+  added: { label: "yeni", cls: "text-ok" },
+  fixed: { label: "düzeltme", cls: "text-warn" },
+  changed: { label: "iyileştirme", cls: "text-ink-2" },
+};
+
+const ENV_PILL: Record<ChangelogEntry["environment"], string> = {
+  PROD: "pill-ok",
+  RC: "pill-warn",
+  BETA: "pill-info",
+};
+
 export function VersionCard({ entry, defaultOpen = false }: Props) {
   const [open, setOpen] = useState(defaultOpen);
   const counts = countByType(entry);
+  const recent = isRecent(entry.date);
+
   return (
-    <div className="relative pl-8">
-      <span
-        className={`absolute left-2 top-2 w-3 h-3 rounded-full ring-4 ring-white dark:ring-zinc-950 ${ENV_DOT[entry.environment]}`}
-        aria-hidden
-      />
-      <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm overflow-hidden">
-        <button
-          type="button"
-          onClick={() => setOpen((o) => !o)}
-          className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition"
-          aria-expanded={open}
+    <article className="card-lift overflow-hidden rounded-xl border border-border bg-surface shadow-[var(--shadow-sm)]">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-2 sm:px-5 sm:py-4"
+        aria-expanded={open}
+      >
+        <motion.span
+          animate={{ rotate: open ? 0 : -90 }}
+          transition={{ duration: 0.18 }}
+          className="shrink-0 text-muted"
         >
-          {open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-          <div className="flex-1 flex items-center gap-3 flex-wrap">
-            <span className="text-sm font-mono font-medium text-zinc-900 dark:text-zinc-100">
-              {entry.version}
-            </span>
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">{formatDate(entry.date)}</span>
-            <span className={`text-xs font-semibold ${ENV_TEXT[entry.environment]}`}>
-              {entry.environment}
-            </span>
-            <span className="text-xs text-zinc-500">·</span>
-            <span className="text-xs text-zinc-600 dark:text-zinc-300">{entry.sourceLabel}</span>
-            {isRecent(entry.date) && (
-              <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-700 dark:text-brand-500">
-                Yeni
+          <ChevronDown size={16} />
+        </motion.span>
+
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1.5">
+          <span className="font-mono text-[14.5px] font-semibold tracking-[-0.01em] text-ink">
+            {entry.version}
+          </span>
+          <span className={ENV_PILL[entry.environment]}>{entry.environment}</span>
+          <span className="text-[12.5px] text-muted">{formatDate(entry.date)}</span>
+          <span className="hidden text-muted sm:inline">·</span>
+          <span className="text-[12.5px] font-medium text-ink-2">{entry.sourceLabel}</span>
+          {recent && <span className="pill-new">Yeni</span>}
+        </div>
+
+        <div className="hidden shrink-0 items-center gap-3 text-[11.5px] font-medium md:flex">
+          {(Object.keys(counts) as ChangeType[]).map((type) =>
+            counts[type] > 0 ? (
+              <span key={type} className={COUNT_CONFIG[type].cls}>
+                <span className="font-semibold">{counts[type]}</span>{" "}
+                <span className="opacity-80">{COUNT_CONFIG[type].label}</span>
               </span>
-            )}
-          </div>
-          <CountChips counts={counts} />
-        </button>
-        <AnimatePresence initial={false}>
-          {open && (
-            <motion.div
-              key="content"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="overflow-hidden border-t border-zinc-100 dark:border-zinc-800"
-            >
-              <ul className="px-4 py-2">
-                {entry.items.length === 0 ? (
-                  <li className="py-2 text-xs italic text-zinc-400">Bu sürümde madde yok.</li>
-                ) : (
-                  entry.items.map((i) => <ChangeItem key={i.id} item={i} />)
-                )}
-              </ul>
-            </motion.div>
+            ) : null,
           )}
-        </AnimatePresence>
-      </div>
-    </div>
+        </div>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden border-t border-border"
+          >
+            <ul className="px-4 py-1 sm:px-5">
+              {entry.items.length === 0 ? (
+                <li className="py-3 text-[13px] italic text-muted">
+                  Bu sürümde madde bulunmuyor.
+                </li>
+              ) : (
+                entry.items.map((i) => <ChangeItem key={i.id} item={i} />)
+              )}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </article>
   );
 }
 
-function countByType(entry: ChangelogEntry) {
-  return entry.items.reduce(
-    (acc, i) => ({ ...acc, [i.type]: (acc[i.type] ?? 0) + 1 }),
-    {} as Record<string, number>,
-  );
-}
-
-interface CountChipsProps {
-  counts: Record<string, number>;
-}
-function CountChips({ counts }: CountChipsProps) {
-  const labels: Record<string, { text: string; cls: string }> = {
-    added: { text: "Yeni", cls: "text-[var(--color-type-added)]" },
-    fixed: { text: "Düzeltme", cls: "text-[var(--color-type-fixed)]" },
-    changed: { text: "İyileştirme", cls: "text-[var(--color-type-changed)]" },
-  };
-  return (
-    <div className="hidden sm:flex items-center gap-2 text-[11px]">
-      {Object.entries(counts).map(([type, n]) => (
-        <span key={type} className={labels[type]?.cls}>
-          {n} {labels[type]?.text ?? type}
-        </span>
-      ))}
-    </div>
-  );
+function countByType(entry: ChangelogEntry): Record<ChangeType, number> {
+  const init: Record<ChangeType, number> = { added: 0, fixed: 0, changed: 0 };
+  return entry.items.reduce<Record<ChangeType, number>>((acc, i) => {
+    acc[i.type] = (acc[i.type] ?? 0) + 1;
+    return acc;
+  }, init);
 }

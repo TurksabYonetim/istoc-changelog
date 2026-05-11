@@ -1,4 +1,4 @@
-import { Inbox } from "lucide-react";
+import { Inbox, RotateCcw } from "lucide-react";
 
 interface Props {
   onReset: () => void;
@@ -6,14 +6,17 @@ interface Props {
 
 export function EmptyState({ onReset }: Props) {
   return (
-    <div className="text-center py-16 text-zinc-500 dark:text-zinc-400">
-      <Inbox size={32} className="mx-auto mb-2 opacity-50" />
-      <p className="text-sm mb-3">Bu kriterlere uyan kayıt yok.</p>
-      <button
-        type="button"
-        onClick={onReset}
-        className="px-3 py-1.5 text-xs rounded-lg bg-brand-500 text-white hover:bg-brand-600"
-      >
+    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-surface px-6 py-16 text-center">
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-50 text-brand-700">
+        <Inbox size={22} />
+      </div>
+      <h2 className="mb-1 text-[16px] font-semibold text-ink">Bu kriterlere uyan kayıt yok</h2>
+      <p className="mb-5 max-w-sm text-[13px] text-muted">
+        Filtre kombinasyonu çok dar. Bir veya birkaç filtreyi gevşetmeyi veya tümünü sıfırlamayı
+        deneyin.
+      </p>
+      <button type="button" onClick={onReset} className="btn-primary">
+        <RotateCcw size={14} />
         Filtreleri Sıfırla
       </button>
     </div>
