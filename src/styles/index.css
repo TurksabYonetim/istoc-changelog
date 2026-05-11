@@ -225,6 +225,11 @@ body {
   border: 1px solid rgba(31, 122, 77, 0.3);
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1.4;
+  flex: 0 0 auto;
+  width: max-content;
+  max-width: 100%;
 }
 
 @utility pill-warn {
@@ -240,6 +245,11 @@ body {
   border: 1px solid rgba(181, 71, 8, 0.3);
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1.4;
+  flex: 0 0 auto;
+  width: max-content;
+  max-width: 100%;
 }
 
 @utility pill-info {
@@ -255,6 +265,11 @@ body {
   border: 1px solid var(--border-rt);
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1.4;
+  flex: 0 0 auto;
+  width: max-content;
+  max-width: 100%;
 }
 
 @utility pill-new {
@@ -269,6 +284,11 @@ body {
   background: var(--color-brand);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1.4;
+  flex: 0 0 auto;
+  width: max-content;
+  max-width: 100%;
 }
 
 @utility eyebrow {
