@@ -2,7 +2,7 @@
 
 3 reponun (`tradehub_core`, `tradehubfront`, `admin-panel`) `CHANGELOG.md` dosyalarını otomatik birleştirip filtrelenebilir bir timeline olarak yayınlar.
 
-**Canlı:** https://tradehub-tr.github.io/istoc-changelog/
+**Canlı:** https://turksabyonetim.github.io/istoc-changelog/
 
 ## Geliştirme
 
