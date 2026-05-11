@@ -1,7 +1,7 @@
 import { Loader2 } from "lucide-react";
 import { useMemo } from "react";
 import { EmptyState } from "./components/EmptyState";
-import { FilterBar } from "./components/FilterBar";
+import { FilterMobileBar, FilterSidebar } from "./components/FilterBar";
 import { Header } from "./components/Header";
 import { Timeline } from "./components/Timeline";
 import { useChangelogData } from "./hooks/useChangelogData";
@@ -19,6 +19,14 @@ export default function App() {
   const filtered = useMemo(() => applyFilters(entries, filters), [entries, filters]);
   const resultCount = filtered.reduce((acc, e) => acc + e.items.length, 0);
 
+  const filterProps = {
+    filters,
+    setFilters,
+    reset,
+    entries,
+    resultCount,
+  };
+
   return (
     <div className="min-h-dvh bg-canvas text-ink">
       <Header
@@ -26,37 +34,33 @@ export default function App() {
         totalEntries={state.status === "ready" ? state.data.entries.length : undefined}
       />
 
-      {state.status === "ready" && (
-        <FilterBar
-          filters={filters}
-          setFilters={setFilters}
-          reset={reset}
-          entries={entries}
-          resultCount={resultCount}
-        />
-      )}
+      {state.status === "ready" && <FilterMobileBar {...filterProps} />}
 
-      <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
-        {state.status === "loading" && (
-          <div className="flex flex-col items-center justify-center py-20 text-muted">
-            <Loader2 size={20} className="mb-3 animate-spin text-brand-700" />
-            <p className="text-[13px]">Geliştirme kaydı yükleniyor…</p>
-          </div>
-        )}
+      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-8">
+        {state.status === "ready" && <FilterSidebar {...filterProps} />}
 
-        {state.status === "error" && (
-          <div className="rounded-xl border border-warn-bg bg-warn-bg px-6 py-8 text-center">
-            <p className="text-[14px] font-semibold text-danger">Veri yüklenemedi</p>
-            <p className="mt-1 text-[12.5px] text-ink-2">{state.message}</p>
-          </div>
-        )}
+        <main className="min-w-0">
+          {state.status === "loading" && (
+            <div className="flex flex-col items-center justify-center py-20 text-muted">
+              <Loader2 size={20} className="mb-3 animate-spin text-brand-700" />
+              <p className="text-[13px]">Geliştirme kaydı yükleniyor…</p>
+            </div>
+          )}
 
-        {state.status === "ready" && filtered.length === 0 && <EmptyState onReset={reset} />}
+          {state.status === "error" && (
+            <div className="rounded-xl border border-warn-bg bg-warn-bg px-6 py-8 text-center">
+              <p className="text-[14px] font-semibold text-danger">Veri yüklenemedi</p>
+              <p className="mt-1 text-[12.5px] text-ink-2">{state.message}</p>
+            </div>
+          )}
 
-        {state.status === "ready" && filtered.length > 0 && <Timeline entries={filtered} />}
-      </main>
+          {state.status === "ready" && filtered.length === 0 && <EmptyState onReset={reset} />}
 
-      <footer className="mx-auto max-w-6xl px-4 py-10 text-center sm:px-6">
+          {state.status === "ready" && filtered.length > 0 && <Timeline entries={filtered} />}
+        </main>
+      </div>
+
+      <footer className="mx-auto max-w-7xl px-4 py-10 text-center sm:px-6">
         <div className="border-t border-border pt-6">
           <p className="text-[12.5px] text-muted">
             <span className="font-semibold text-ink-2">İstoç</span> · Geliştirme Kaydı · Otomatik

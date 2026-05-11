@@ -18,11 +18,15 @@ export interface FilterState {
   query: string;
 }
 
+/**
+ * Filter semantics: an empty Set means "no filter on this dimension"
+ * (include everything). A non-empty Set means "only include items matching one of these".
+ */
 export function defaultFilters(): FilterState {
   return {
-    sources: new Set(ALL_SOURCES),
-    types: new Set(ALL_TYPES),
-    environments: new Set(ALL_ENVS),
+    sources: new Set<Source>(),
+    types: new Set<ChangeType>(),
+    environments: new Set<Environment>(),
     dateFrom: null,
     dateTo: null,
     query: "",
@@ -34,16 +38,20 @@ export function applyFilters(
   filters: FilterState,
 ): ChangelogEntry[] {
   const q = filters.query.trim().toLocaleLowerCase("tr");
+  const sourceFilter = filters.sources.size > 0;
+  const envFilter = filters.environments.size > 0;
+  const typeFilter = filters.types.size > 0;
+
   return entries
-    .filter((e) => filters.sources.has(e.source))
-    .filter((e) => filters.environments.has(e.environment))
+    .filter((e) => !sourceFilter || filters.sources.has(e.source))
+    .filter((e) => !envFilter || filters.environments.has(e.environment))
     .filter((e) => (filters.dateFrom ? e.date >= filters.dateFrom : true))
     .filter((e) => (filters.dateTo ? e.date <= filters.dateTo : true))
     .map((e) => ({
       ...e,
-      items: e.items.filter((i) => filters.types.has(i.type)),
+      items: typeFilter ? e.items.filter((i) => filters.types.has(i.type)) : e.items,
     }))
-    .filter((e) => e.items.length > 0 || filters.types.size === ALL_TYPES.length)
+    .filter((e) => !typeFilter || e.items.length > 0)
     .filter((e) => {
       if (!q) return true;
       const haystack = [
@@ -60,9 +68,9 @@ export function applyFilters(
 
 export function filtersToQuery(f: FilterState): string {
   const params = new URLSearchParams();
-  if (f.sources.size < ALL_SOURCES.length) params.set("modul", [...f.sources].sort().join(","));
-  if (f.types.size < ALL_TYPES.length) params.set("tip", [...f.types].sort().join(","));
-  if (f.environments.size < ALL_ENVS.length) params.set("ortam", [...f.environments].sort().join(","));
+  if (f.sources.size > 0) params.set("modul", [...f.sources].sort().join(","));
+  if (f.types.size > 0) params.set("tip", [...f.types].sort().join(","));
+  if (f.environments.size > 0) params.set("ortam", [...f.environments].sort().join(","));
   if (f.dateFrom) params.set("dan", f.dateFrom);
   if (f.dateTo) params.set("kadar", f.dateTo);
   if (f.query) params.set("q", f.query);

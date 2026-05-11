@@ -348,6 +348,90 @@ body {
   text-decoration-thickness: 1px;
 }
 
+/* Sidebar vertical filter rows */
+@utility filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 7px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.12s ease;
+  text-align: left;
+}
+
+@utility filter-row-on {
+  background: transparent;
+}
+
+@utility filter-row-off {
+  background: transparent;
+}
+
+@utility filter-row-label {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-rt);
+  line-height: 1.3;
+}
+
+@utility filter-row-count {
+  font-size: 11px;
+  color: var(--muted-rt);
+  font-variant-numeric: tabular-nums;
+}
+
+@utility checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid var(--border-strong-rt);
+  background: var(--surface-rt);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: transparent;
+  transition: all 0.15s ease;
+}
+
+@utility checkbox-on {
+  background: var(--color-brand);
+  border-color: var(--color-brand-700);
+  color: #1a1a1a;
+  box-shadow: 0 0 0 3px rgba(245, 184, 0, 0.18);
+}
+
+@utility checkbox-dim {
+  background: transparent;
+  border-color: var(--border-rt);
+  border-style: dashed;
+}
+
+@utility preset-btn {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-rt);
+  background: var(--surface-rt);
+  color: var(--ink-2-rt);
+  cursor: pointer;
+  transition: all 0.12s ease;
+  text-align: center;
+}
+
+@utility preset-btn-active {
+  background: var(--color-brand);
+  color: #1a1a1a;
+  border-color: var(--color-brand-700);
+  font-weight: 600;
+}
+
 /* ─── COMPLEX STATE STYLES (not @utility — use direct CSS) ──────── */
 
 .btn-primary:hover { filter: brightness(0.97); }
@@ -393,4 +477,17 @@ body {
   opacity: 0.9;
   text-decoration: none;
   color: var(--ink-2-rt);
+}
+
+.filter-row:hover { background: var(--surface-2-rt); }
+.filter-row-on .filter-row-label { font-weight: 600; color: var(--ink-rt); }
+.filter-row-all .filter-row-label { color: var(--ink-2-rt); }
+.filter-row-off .filter-row-label { color: var(--muted-rt); }
+.filter-row-off .filter-row-count { opacity: 0.6; }
+.filter-row:hover .checkbox:not(.checkbox-on) { border-color: var(--color-brand); border-style: solid; }
+.preset-btn:hover { border-color: var(--border-strong-rt); color: var(--ink-rt); }
+.preset-btn-active:hover {
+  filter: brightness(0.97);
+  color: #1a1a1a;
+  border-color: var(--color-brand-700);
 }
