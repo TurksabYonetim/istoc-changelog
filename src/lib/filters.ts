@@ -16,7 +16,6 @@ export interface FilterState {
   dateFrom: string | null;
   dateTo: string | null;
   query: string;
-  hideDuplicates: boolean;
   hideEmpty: boolean;
 }
 
@@ -32,7 +31,6 @@ export function defaultFilters(): FilterState {
     dateFrom: null,
     dateTo: null,
     query: "",
-    hideDuplicates: false,
     hideEmpty: true,
   };
 }
@@ -79,7 +77,6 @@ export function filtersToQuery(f: FilterState): string {
   if (f.dateFrom) params.set("dan", f.dateFrom);
   if (f.dateTo) params.set("kadar", f.dateTo);
   if (f.query) params.set("q", f.query);
-  if (f.hideDuplicates) params.set("tekrarsiz", "1");
   if (!f.hideEmpty) params.set("bos", "1");
   return params.toString();
 }
@@ -96,7 +93,6 @@ export function filtersFromQuery(qs: string): FilterState {
   f.dateFrom = params.get("dan");
   f.dateTo = params.get("kadar");
   f.query = params.get("q") ?? "";
-  f.hideDuplicates = params.get("tekrarsiz") === "1";
   f.hideEmpty = params.get("bos") !== "1";
   return f;
 }

@@ -73,7 +73,6 @@ describe("filters", () => {
       dateFrom: "2026-01-01",
       dateTo: "2026-12-31",
       query: "kyb",
-      hideDuplicates: true,
       hideEmpty: false,
     };
     const qs = filtersToQuery(f);
