@@ -81,11 +81,23 @@ export function parseChangelog(markdown: string, source: Source): ParseResult {
   }
 
   for (const { entry } of sectionsByVersion) {
+    entry.items = dedupeWithinEntry(entry.items);
     entries.push(entry);
   }
 
   entries.sort((a, b) => b.date.localeCompare(a.date));
   return { entries, errors };
+}
+
+/** Drop duplicate items within the same entry (same type + same normalized text). */
+function dedupeWithinEntry(items: ChangeItem[]): ChangeItem[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = `${item.type}|${normalizeItemText(item.text)}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 function headingText(node: Heading): string {
