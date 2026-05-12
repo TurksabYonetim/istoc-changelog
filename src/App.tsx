@@ -7,6 +7,7 @@ import { Timeline } from "./components/Timeline";
 import { useChangelogData } from "./hooks/useChangelogData";
 import { useFilters } from "./hooks/useFilters";
 import { applyFilters } from "./lib/filters";
+import { deduplicateItems } from "./lib/parser";
 
 export default function App() {
   const state = useChangelogData();
@@ -16,7 +17,10 @@ export default function App() {
     () => (state.status === "ready" ? state.data.entries : []),
     [state],
   );
-  const filtered = useMemo(() => applyFilters(entries, filters), [entries, filters]);
+  const filtered = useMemo(() => {
+    const base = applyFilters(entries, filters);
+    return filters.hideDuplicates ? deduplicateItems(base) : base;
+  }, [entries, filters]);
   const resultCount = filtered.reduce((acc, e) => acc + e.items.length, 0);
 
   const filterProps = {

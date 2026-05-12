@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 import remarkParse from "remark-parse";
 import { unified } from "unified";
 import type { Heading, List, Root } from "mdast";
@@ -120,9 +119,86 @@ function collectText(node: unknown): string {
   return "";
 }
 
+/** Browser-safe stable hash (FNV-1a 32-bit). Not cryptographic — only needs uniqueness. */
 function makeId(source: Source, version: string, type: ChangeType, idx: number, text: string): string {
-  return createHash("sha1")
-    .update(`${source}|${version}|${type}|${idx}|${text}`)
-    .digest("hex")
-    .slice(0, 12);
+  const input = `${source}|${version}|${type}|${idx}|${text}`;
+  let h = 0x811c9dc5;
+  for (let i = 0; i < input.length; i++) {
+    h ^= input.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  // Mix index again to reduce collisions on similar inputs, return 12-char hex
+  const mix = (h ^ Math.imul(idx + 1, 0x27d4eb2f)) >>> 0;
+  return (mix.toString(16) + h.toString(16).padStart(8, "0")).slice(0, 12);
+}
+
+function compareVersions(a: string, b: string): number {
+  return a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" });
+}
+
+function itemsSignature(items: ChangeItem[]): string {
+  return items
+    .map((i) => `${i.type}::${i.text.replace(/\s+/g, " ").trim()}`)
+    .sort()
+    .join("\n");
+}
+
+/**
+ * Removes empty entries and collapses entries that share the same source+date and
+ * carry identical item content (e.g. successive beta tags pointing at the same diff).
+ * Keeps the entry with the highest version per duplicate group.
+ */
+export function deduplicateEntries(entries: ChangelogEntry[]): ChangelogEntry[] {
+  const winners = new Map<string, ChangelogEntry>();
+  for (const e of entries) {
+    if (e.items.length === 0) continue;
+    const key = `${e.source}|${e.date}|${itemsSignature(e.items)}`;
+    const existing = winners.get(key);
+    if (!existing || compareVersions(e.version, existing.version) > 0) {
+      winners.set(key, e);
+    }
+  }
+  return Array.from(winners.values());
+}
+
+/**
+ * Removes duplicate items across entries — if the same change text appears in
+ * multiple versions (e.g. a fix carried through beta → rc → prod), keep only
+ * the FIRST occurrence (earliest version chronologically). Subsequent entries
+ * lose that item. Entries that end up empty are dropped.
+ *
+ * Duplicates compared per-source: identical text in different repos is preserved.
+ * Normalization strips trailing "(@author)" attribution and lowercases for match.
+ */
+export function deduplicateItems(entries: ChangelogEntry[]): ChangelogEntry[] {
+  const sortedAsc = [...entries].sort((a, b) => {
+    const d = a.date.localeCompare(b.date);
+    if (d !== 0) return d;
+    return compareVersions(a.version, b.version);
+  });
+
+  const seen = new Set<string>();
+  const result = new Map<ChangelogEntry, ChangelogEntry>();
+
+  for (const entry of sortedAsc) {
+    const keptItems = entry.items.filter((item) => {
+      const key = `${entry.source}|${item.type}|${normalizeItemText(item.text)}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    if (keptItems.length > 0) {
+      result.set(entry, { ...entry, items: keptItems });
+    }
+  }
+
+  return entries.map((e) => result.get(e)).filter((e): e is ChangelogEntry => Boolean(e));
+}
+
+function normalizeItemText(text: string): string {
+  return text
+    .replace(/\s*\(@[\w-]+\)\s*$/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLocaleLowerCase("tr");
 }

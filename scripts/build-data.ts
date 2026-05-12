@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { fetchAllChangelogs, type FetchedChangelog } from "./fetch-changelogs";
-import { parseChangelog } from "../src/lib/parser";
+import { deduplicateEntries, parseChangelog } from "../src/lib/parser";
 import type { ChangelogData, ParseError, Source } from "../src/types/changelog";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -36,18 +36,23 @@ async function run(): Promise<void> {
     allEntries.push(...entries);
     allErrors.push(...errors);
   }
-  allEntries.sort((a, b) => b.date.localeCompare(a.date));
+  const deduped = deduplicateEntries(allEntries);
+  deduped.sort((a, b) => {
+    const d = b.date.localeCompare(a.date);
+    if (d !== 0) return d;
+    return b.version.localeCompare(a.version, undefined, { numeric: true });
+  });
 
   const data: ChangelogData = {
     generatedAt: new Date().toISOString(),
-    entries: allEntries,
+    entries: deduped,
     errors: allErrors,
   };
 
   mkdirSync(outDir, { recursive: true });
   writeFileSync(outFile, JSON.stringify(data, null, 2), "utf-8");
   console.warn(
-    `Wrote ${allEntries.length} entries from ${sources.length} source(s) to ${outFile} (${allErrors.length} errors)`,
+    `Wrote ${deduped.length} entries (from ${allEntries.length} parsed) from ${sources.length} source(s) to ${outFile} (${allErrors.length} errors)`,
   );
 }
 

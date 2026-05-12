@@ -66,7 +66,8 @@ function FilterPanel({ filters, setFilters, reset, entries, resultCount }: Commo
     (filters.types.size > 0 ? 1 : 0) +
     (filters.environments.size > 0 ? 1 : 0) +
     (filters.dateFrom || filters.dateTo ? 1 : 0) +
-    (filters.query ? 1 : 0);
+    (filters.query ? 1 : 0) +
+    (filters.hideDuplicates ? 1 : 0);
 
   return (
     <div className="flex flex-col gap-5">
@@ -139,6 +140,34 @@ function FilterPanel({ filters, setFilters, reset, entries, resultCount }: Commo
         </div>
       </div>
 
+      <label className="flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-[12.5px] transition-colors hover:border-border-strong">
+        <span className="flex flex-col gap-0.5">
+          <span className="font-medium text-ink">Tekrarları gizle</span>
+          <span className="text-[10.5px] text-muted">Aynı değişikliği bir kez göster</span>
+        </span>
+        <span
+          className={
+            filters.hideDuplicates ? "toggle-track toggle-track-on" : "toggle-track"
+          }
+          role="switch"
+          aria-checked={filters.hideDuplicates}
+        >
+          <input
+            type="checkbox"
+            className="sr-only"
+            checked={filters.hideDuplicates}
+            onChange={(e) =>
+              setFilters({ ...filters, hideDuplicates: e.target.checked })
+            }
+          />
+          <span
+            className={
+              filters.hideDuplicates ? "toggle-thumb toggle-thumb-on" : "toggle-thumb"
+            }
+          />
+        </span>
+      </label>
+
       <div className="flex flex-col gap-2 border-t border-border pt-4">
         <div className="flex items-baseline justify-between text-[12.5px]">
           <span aria-live="polite">
@@ -177,7 +206,8 @@ export function FilterMobileBar(props: CommonProps) {
     (props.filters.types.size > 0 ? 1 : 0) +
     (props.filters.environments.size > 0 ? 1 : 0) +
     (props.filters.dateFrom || props.filters.dateTo ? 1 : 0) +
-    (props.filters.query ? 1 : 0);
+    (props.filters.query ? 1 : 0) +
+    (props.filters.hideDuplicates ? 1 : 0);
 
   return (
     <div className="sticky top-[57px] z-20 border-b border-border bg-canvas/85 backdrop-blur-md lg:hidden">

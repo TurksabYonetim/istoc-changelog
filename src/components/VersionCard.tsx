@@ -77,13 +77,7 @@ export function VersionCard({ entry, defaultOpen = false }: Props) {
             className="overflow-hidden border-t border-border"
           >
             <ul className="px-4 py-1 sm:px-5">
-              {entry.items.length === 0 ? (
-                <li className="py-3 text-[13px] italic text-muted">
-                  Bu sürümde madde bulunmuyor.
-                </li>
-              ) : (
-                entry.items.map((i) => <ChangeItem key={i.id} item={i} />)
-              )}
+              {entry.items.map((i) => <ChangeItem key={i.id} item={i} />)}
             </ul>
           </motion.div>
         )}
