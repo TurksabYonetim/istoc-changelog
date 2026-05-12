@@ -74,6 +74,7 @@ describe("filters", () => {
       dateTo: "2026-12-31",
       query: "kyb",
       hideDuplicates: true,
+      hideEmpty: false,
     };
     const qs = filtersToQuery(f);
     const back = filtersFromQuery(qs);

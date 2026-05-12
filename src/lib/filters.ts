@@ -17,6 +17,7 @@ export interface FilterState {
   dateTo: string | null;
   query: string;
   hideDuplicates: boolean;
+  hideEmpty: boolean;
 }
 
 /**
@@ -32,6 +33,7 @@ export function defaultFilters(): FilterState {
     dateTo: null,
     query: "",
     hideDuplicates: false,
+    hideEmpty: true,
   };
 }
 
@@ -53,7 +55,8 @@ export function applyFilters(
       ...e,
       items: typeFilter ? e.items.filter((i) => filters.types.has(i.type)) : e.items,
     }))
-    .filter((e) => e.items.length > 0)
+    .filter((e) => !filters.hideEmpty || e.items.length > 0)
+    .filter((e) => !typeFilter || e.items.length > 0)
     .filter((e) => {
       if (!q) return true;
       const haystack = [
@@ -77,6 +80,7 @@ export function filtersToQuery(f: FilterState): string {
   if (f.dateTo) params.set("kadar", f.dateTo);
   if (f.query) params.set("q", f.query);
   if (f.hideDuplicates) params.set("tekrarsiz", "1");
+  if (!f.hideEmpty) params.set("bos", "1");
   return params.toString();
 }
 
@@ -93,6 +97,7 @@ export function filtersFromQuery(qs: string): FilterState {
   f.dateTo = params.get("kadar");
   f.query = params.get("q") ?? "";
   f.hideDuplicates = params.get("tekrarsiz") === "1";
+  f.hideEmpty = params.get("bos") !== "1";
   return f;
 }
 
