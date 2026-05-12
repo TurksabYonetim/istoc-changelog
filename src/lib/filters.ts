@@ -53,7 +53,7 @@ export function applyFilters(
       ...e,
       items: typeFilter ? e.items.filter((i) => filters.types.has(i.type)) : e.items,
     }))
-    .filter((e) => !typeFilter || e.items.length > 0)
+    .filter((e) => e.items.length > 0)
     .filter((e) => {
       if (!q) return true;
       const haystack = [
