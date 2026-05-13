@@ -8,6 +8,7 @@ export interface ChangeItem {
   id: string;
   type: ChangeType;
   text: string;
+  children?: ChangeItem[];
 }
 
 export interface ChangelogEntry {

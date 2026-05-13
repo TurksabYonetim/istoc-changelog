@@ -1,4 +1,5 @@
 import type {
+  ChangeItem,
   ChangeType,
   ChangelogEntry,
   Environment,
@@ -61,12 +62,20 @@ export function applyFilters(
         e.version,
         e.sourceLabel,
         e.environment,
-        ...e.items.map((i) => i.text),
+        ...e.items.flatMap(collectItemText),
       ]
         .join(" ")
         .toLocaleLowerCase("tr");
       return haystack.includes(q);
     });
+}
+
+function collectItemText(item: ChangeItem): string[] {
+  const own = [item.text];
+  if (item.children && item.children.length > 0) {
+    return own.concat(item.children.flatMap(collectItemText));
+  }
+  return own;
 }
 
 export function filtersToQuery(f: FilterState): string {

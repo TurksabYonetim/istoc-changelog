@@ -1,6 +1,6 @@
 import remarkParse from "remark-parse";
 import { unified } from "unified";
-import type { Heading, List, Root } from "mdast";
+import type { Heading, List, ListItem, Root } from "mdast";
 import type {
   ChangeItem,
   ChangelogEntry,
@@ -112,15 +112,39 @@ function extractListItems(
   source: Source,
   entry: ChangelogEntry,
   type: ChangeType,
+  parentPath = "",
 ): ChangeItem[] {
-  return list.children.map((li, idx) => {
-    const text = collectText(li).trim();
-    return {
-      id: makeId(source, entry.version, type, idx, text),
-      type,
-      text,
-    };
-  });
+  return list.children.map((li, idx) => extractListItem(li, source, entry, type, idx, parentPath));
+}
+
+function extractListItem(
+  li: ListItem,
+  source: Source,
+  entry: ChangelogEntry,
+  type: ChangeType,
+  idx: number,
+  parentPath: string,
+): ChangeItem {
+  // Direct (own) text: every child of the listItem EXCEPT nested lists.
+  const ownText = li.children
+    .filter((c) => c.type !== "list")
+    .map((c) => collectText(c))
+    .join(" ")
+    .trim();
+
+  const path = parentPath ? `${parentPath}/${idx}` : `${idx}`;
+  const item: ChangeItem = {
+    id: makeId(source, entry.version, type, path, ownText),
+    type,
+    text: ownText,
+  };
+
+  const nested = li.children.find((c): c is List => c.type === "list");
+  if (nested && nested.children.length > 0) {
+    item.children = extractListItems(nested, source, entry, type, path);
+  }
+
+  return item;
 }
 
 function collectText(node: unknown): string {
@@ -132,15 +156,19 @@ function collectText(node: unknown): string {
 }
 
 /** Browser-safe stable hash (FNV-1a 32-bit). Not cryptographic — only needs uniqueness. */
-function makeId(source: Source, version: string, type: ChangeType, idx: number, text: string): string {
-  const input = `${source}|${version}|${type}|${idx}|${text}`;
+function makeId(source: Source, version: string, type: ChangeType, path: string, text: string): string {
+  const input = `${source}|${version}|${type}|${path}|${text}`;
   let h = 0x811c9dc5;
   for (let i = 0; i < input.length; i++) {
     h ^= input.charCodeAt(i);
     h = Math.imul(h, 0x01000193);
   }
-  // Mix index again to reduce collisions on similar inputs, return 12-char hex
-  const mix = (h ^ Math.imul(idx + 1, 0x27d4eb2f)) >>> 0;
+  // Mix path again to reduce collisions on similar inputs, return 12-char hex
+  let pathHash = 0;
+  for (let i = 0; i < path.length; i++) {
+    pathHash = (Math.imul(pathHash, 31) + path.charCodeAt(i)) >>> 0;
+  }
+  const mix = (h ^ Math.imul(pathHash + 1, 0x27d4eb2f)) >>> 0;
   return (mix.toString(16) + h.toString(16).padStart(8, "0")).slice(0, 12);
 }
 
@@ -150,9 +178,16 @@ function compareVersions(a: string, b: string): number {
 
 function itemsSignature(items: ChangeItem[]): string {
   return items
-    .map((i) => `${i.type}::${i.text.replace(/\s+/g, " ").trim()}`)
+    .map((i) => `${i.type}::${i.text.replace(/\s+/g, " ").trim()}::${childrenSignature(i.children)}`)
     .sort()
     .join("\n");
+}
+
+function childrenSignature(children: ChangeItem[] | undefined): string {
+  if (!children || children.length === 0) return "";
+  return children
+    .map((c) => `${c.text.replace(/\s+/g, " ").trim()}::${childrenSignature(c.children)}`)
+    .join("|");
 }
 
 /**

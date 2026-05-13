@@ -67,4 +67,41 @@ describe("parseChangelog", () => {
     const dates = entries.map((e) => e.date);
     expect(dates).toEqual([...dates].sort((a, b) => b.localeCompare(a)));
   });
+
+  it("parses nested list items as children, not flattened text", () => {
+    const md = [
+      "## [v1.0.0] - 2026-05-01 BETA",
+      "",
+      "### Eklendi",
+      "",
+      "- feat(reviews): Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix (@boraydeger32)",
+      "  - Yorum Yaz modal: form + foto + kategori şablon cevapları",
+      "  - Şikayet Et modal: sebep dropdown + not",
+      "  - Q&A bottom-sheet: mobile-first soru/cevap görüntüleme",
+      "- feat(other): standalone item",
+      "",
+    ].join("\n");
+
+    const { entries, errors } = parseChangelog(md, "frontend");
+    expect(errors).toEqual([]);
+    expect(entries).toHaveLength(1);
+    expect(entries[0].items).toHaveLength(2);
+
+    const sprint = entries[0].items[0];
+    expect(sprint.text).toBe(
+      "feat(reviews): Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix (@boraydeger32)",
+    );
+    expect(sprint.children).toHaveLength(3);
+    expect(sprint.children![0].text).toBe(
+      "Yorum Yaz modal: form + foto + kategori şablon cevapları",
+    );
+    expect(sprint.children![0].type).toBe("added");
+    expect(sprint.children![2].text).toBe(
+      "Q&A bottom-sheet: mobile-first soru/cevap görüntüleme",
+    );
+
+    const standalone = entries[0].items[1];
+    expect(standalone.text).toBe("feat(other): standalone item");
+    expect(standalone.children).toBeUndefined();
+  });
 });
