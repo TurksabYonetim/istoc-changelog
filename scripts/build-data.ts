@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { fetchAllChangelogs, type FetchedChangelog } from "./fetch-changelogs";
-import { deduplicateEntries, parseChangelog } from "../src/lib/parser";
+import { deduplicateEntries, deduplicateItems, parseChangelog } from "../src/lib/parser";
 import type { ChangelogData, ParseError, Source } from "../src/types/changelog";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -36,7 +36,14 @@ async function run(): Promise<void> {
     allEntries.push(...entries);
     allErrors.push(...errors);
   }
-  const deduped = deduplicateEntries(allEntries);
+  // 2 katmanli dedupe:
+  // 1) deduplicateEntries: ayni source+date+icerik tasiyan release'leri (ornegin
+  //    art arda atilmis beta tag'leri) tek release'e indirger, en yuksek
+  //    surumdekini tutar.
+  // 2) deduplicateItems: ayni item'in birden fazla release'de tekrar gorunmesini
+  //    engeller (ornegin .10'daki bir feat workflow PREV bug'i nedeniyle .12'ye
+  //    de yazildiysa), kronolojik olarak ilk release'de tutar.
+  const deduped = deduplicateItems(deduplicateEntries(allEntries));
   deduped.sort((a, b) => {
     const d = b.date.localeCompare(a.date);
     if (d !== 0) return d;
