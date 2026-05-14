@@ -70,10 +70,10 @@ describe("filters", () => {
       sources: new Set(["frontend"]),
       types: new Set(["fixed"]),
       environments: new Set(["BETA", "RC"]),
+      authors: new Set(["ahmet", "bora"]),
       dateFrom: "2026-01-01",
       dateTo: "2026-12-31",
       query: "kyb",
-      hideEmpty: false,
     };
     const qs = filtersToQuery(f);
     const back = filtersFromQuery(qs);
@@ -82,5 +82,43 @@ describe("filters", () => {
 
   it("returns default when query string is empty", () => {
     expect(filtersFromQuery("")).toEqual(defaultFilters());
+  });
+
+  it("filters by author handle — drops items missing or attributed to others", () => {
+    const entries: ChangelogEntry[] = [
+      {
+        source: "frontend",
+        sourceLabel: "Müşteri Sitesi",
+        version: "v1.2.0",
+        date: "2026-05-12",
+        environment: "BETA",
+        items: [
+          { id: "1", type: "added", text: "Sepet düzeltmesi (@ahmeetseker)" },
+          { id: "2", type: "added", text: "Q&A bottom-sheet (@boraydeger32)" },
+          { id: "3", type: "fixed", text: "Anonim girdi" },
+          { id: "4", type: "fixed", text: "Bot commit (@TurksabYonetim)" },
+        ],
+      },
+    ];
+    const f: FilterState = { ...defaultFilters(), authors: new Set(["ahmet"]) };
+    const out = applyFilters(entries, f);
+    expect(out).toHaveLength(1);
+    expect(out[0].items).toHaveLength(1);
+    expect(out[0].items[0].text).toContain("ahmeetseker");
+  });
+
+  it("drops entries with zero items by default (no toggle)", () => {
+    const entries: ChangelogEntry[] = [
+      {
+        source: "frontend",
+        sourceLabel: "Müşteri Sitesi",
+        version: "v1.2.0",
+        date: "2026-05-12",
+        environment: "BETA",
+        items: [],
+      },
+      ...sample,
+    ];
+    expect(applyFilters(entries, defaultFilters())).toHaveLength(2);
   });
 });

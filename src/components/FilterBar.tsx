@@ -2,12 +2,20 @@ import { Check, Link as LinkIcon, RotateCcw, Search, SlidersHorizontal, X } from
 import { useMemo, useState } from "react";
 import type { FilterState } from "../lib/filters";
 import type {
+  Author,
   ChangelogEntry,
   ChangeType,
   Environment,
   Source,
 } from "../types/changelog";
-import { ENV_LABELS, SOURCE_LABELS, TYPE_LABELS } from "../types/changelog";
+import {
+  AUTHORS,
+  ENV_LABELS,
+  SOURCE_LABELS,
+  TYPE_LABELS,
+  authorIdFromHandle,
+  extractAuthorHandle,
+} from "../types/changelog";
 
 interface CommonProps {
   filters: FilterState;
@@ -20,6 +28,10 @@ interface CommonProps {
 const SOURCES: Source[] = ["backend", "frontend", "admin"];
 const TYPES: ChangeType[] = ["added", "fixed", "changed"];
 const ENVS: Environment[] = ["PROD", "RC", "BETA"];
+const AUTHOR_IDS: Author[] = AUTHORS.map((a) => a.id);
+const AUTHOR_LABEL: Record<Author, string> = Object.fromEntries(
+  AUTHORS.map((a) => [a.id, a.label]),
+) as Record<Author, string>;
 
 const DATE_PRESETS: { key: string; label: string; days: number | null }[] = [
   { key: "week", label: "Bu hafta", days: 7 },
@@ -65,9 +77,9 @@ function FilterPanel({ filters, setFilters, reset, entries, resultCount }: Commo
     (filters.sources.size > 0 ? 1 : 0) +
     (filters.types.size > 0 ? 1 : 0) +
     (filters.environments.size > 0 ? 1 : 0) +
+    (filters.authors.size > 0 ? 1 : 0) +
     (filters.dateFrom || filters.dateTo ? 1 : 0) +
-    (filters.query ? 1 : 0) +
-    (!filters.hideEmpty ? 1 : 0);
+    (filters.query ? 1 : 0);
 
   return (
     <div className="flex flex-col gap-5">
@@ -121,6 +133,14 @@ function FilterPanel({ filters, setFilters, reset, entries, resultCount }: Commo
           setFilters({ ...filters, environments: toggleSet(filters.environments, e) })
         }
       />
+      <DimensionGroup
+        label="Geliştirici"
+        values={AUTHOR_IDS}
+        selected={filters.authors}
+        counts={counts.authors}
+        labelFn={(a) => AUTHOR_LABEL[a]}
+        onToggle={(a) => setFilters({ ...filters, authors: toggleSet(filters.authors, a) })}
+      />
 
       <div className="flex flex-col gap-2">
         <span className="mini-label">Tarih</span>
@@ -139,28 +159,6 @@ function FilterPanel({ filters, setFilters, reset, entries, resultCount }: Commo
           ))}
         </div>
       </div>
-
-      <label className="flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-[12.5px] transition-colors hover:border-border-strong">
-        <span className="flex flex-col gap-0.5">
-          <span className="font-medium text-ink">Boş sürümleri gizle</span>
-          <span className="text-[10.5px] text-muted">İçeriği olmayan kayıtları atla</span>
-        </span>
-        <span
-          className={filters.hideEmpty ? "toggle-track toggle-track-on" : "toggle-track"}
-          role="switch"
-          aria-checked={filters.hideEmpty}
-        >
-          <input
-            type="checkbox"
-            className="sr-only"
-            checked={filters.hideEmpty}
-            onChange={(e) => setFilters({ ...filters, hideEmpty: e.target.checked })}
-          />
-          <span
-            className={filters.hideEmpty ? "toggle-thumb toggle-thumb-on" : "toggle-thumb"}
-          />
-        </span>
-      </label>
 
       <div className="flex flex-col gap-2 border-t border-border pt-4">
         <div className="flex items-baseline justify-between text-[12.5px]">
@@ -199,9 +197,9 @@ export function FilterMobileBar(props: CommonProps) {
     (props.filters.sources.size > 0 ? 1 : 0) +
     (props.filters.types.size > 0 ? 1 : 0) +
     (props.filters.environments.size > 0 ? 1 : 0) +
+    (props.filters.authors.size > 0 ? 1 : 0) +
     (props.filters.dateFrom || props.filters.dateTo ? 1 : 0) +
-    (props.filters.query ? 1 : 0) +
-    (!props.filters.hideEmpty ? 1 : 0);
+    (props.filters.query ? 1 : 0);
 
   return (
     <div className="sticky top-[57px] z-20 border-b border-border bg-canvas/85 backdrop-blur-md lg:hidden">
@@ -323,10 +321,15 @@ function countByDimension(entries: ChangelogEntry[]) {
   const sources: Record<string, number> = {};
   const types: Record<string, number> = {};
   const envs: Record<string, number> = {};
+  const authors: Record<string, number> = {};
   for (const e of entries) {
     sources[e.source] = (sources[e.source] ?? 0) + 1;
     envs[e.environment] = (envs[e.environment] ?? 0) + 1;
-    for (const i of e.items) types[i.type] = (types[i.type] ?? 0) + 1;
+    for (const i of e.items) {
+      types[i.type] = (types[i.type] ?? 0) + 1;
+      const id = authorIdFromHandle(extractAuthorHandle(i.text));
+      if (id) authors[id] = (authors[id] ?? 0) + 1;
+    }
   }
-  return { sources, types, envs };
+  return { sources, types, envs, authors };
 }

@@ -49,3 +49,26 @@ export const ENV_LABELS: Record<Environment, string> = {
   RC: "RC",
   PROD: "PROD",
 };
+
+export type Author = "ahmet" | "bora" | "ali";
+
+export const AUTHORS: { id: Author; label: string; handles: string[] }[] = [
+  { id: "ahmet", label: "Ahmet", handles: ["ahmeetseker"] },
+  { id: "bora", label: "Bora", handles: ["boraydeger32"] },
+  { id: "ali", label: "Ali", handles: ["aliiball"] },
+];
+
+const HANDLE_TO_AUTHOR: Record<string, Author> = Object.fromEntries(
+  AUTHORS.flatMap((a) => a.handles.map((h) => [h.toLocaleLowerCase("tr"), a.id])),
+);
+
+const AUTHOR_RE = /\(@([\w-]+)\)\s*$/;
+
+export function extractAuthorHandle(text: string): string | null {
+  return text.match(AUTHOR_RE)?.[1] ?? null;
+}
+
+export function authorIdFromHandle(handle: string | null): Author | null {
+  if (!handle) return null;
+  return HANDLE_TO_AUTHOR[handle.toLocaleLowerCase("tr")] ?? null;
+}
