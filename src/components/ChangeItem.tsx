@@ -10,9 +10,9 @@ interface Props {
 }
 
 const SHORT_LABEL: Record<Item["type"], string> = {
-  added: "Yeni",
-  fixed: "Düzelt",
-  changed: "İyileş",
+  added: "feature",
+  fixed: "Fixed",
+  changed: "improvement",
 };
 
 const PILL_CLASS: Record<Item["type"], string> = {
