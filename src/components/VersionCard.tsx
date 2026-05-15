@@ -11,9 +11,9 @@ interface Props {
 }
 
 const COUNT_CONFIG: Record<ChangeType, { label: string; cls: string }> = {
-  added: { label: "yeni", cls: "text-ok" },
-  fixed: { label: "düzeltme", cls: "text-warn" },
-  changed: { label: "iyileştirme", cls: "text-ink-2" },
+  added: { label: "feature", cls: "text-ok" },
+  fixed: { label: "Fixed", cls: "text-warn" },
+  changed: { label: "improvement", cls: "text-ink-2" },
 };
 
 const ENV_PILL: Record<ChangelogEntry["environment"], string> = {

@@ -15,7 +15,7 @@ describe("parseChangelog", () => {
     expect(entries).toHaveLength(3);
     expect(entries[0]).toMatchObject({
       source: "frontend",
-      sourceLabel: "Müşteri Sitesi",
+      sourceLabel: "Frontpages",
       version: "v1.1.8-beta.1",
       date: "2026-05-11",
       environment: "BETA",
@@ -112,7 +112,7 @@ describe("deduplicateItems", () => {
   function adminEntry(version: string, date: string, texts: string[]): ChangelogEntry {
     return {
       source: "admin",
-      sourceLabel: "Yönetim Paneli",
+      sourceLabel: "Admin",
       version,
       date,
       environment: "BETA",
@@ -157,7 +157,7 @@ describe("deduplicateItems", () => {
     const frontendE: ChangelogEntry = {
       ...adminEntry("v1.0.0", "2026-05-13", ["feat(x): same text"]),
       source: "frontend",
-      sourceLabel: "Müşteri Sitesi",
+      sourceLabel: "Frontpages",
     };
     const result = deduplicateItems([adminE, frontendE]);
     expect(result).toHaveLength(2); // ikisi de korunur

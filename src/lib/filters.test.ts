@@ -11,7 +11,7 @@ import type { ChangelogEntry } from "../types/changelog";
 const sample: ChangelogEntry[] = [
   {
     source: "frontend",
-    sourceLabel: "Müşteri Sitesi",
+    sourceLabel: "Frontpages",
     version: "v1.1.8",
     date: "2026-05-08",
     environment: "PROD",
@@ -88,7 +88,7 @@ describe("filters", () => {
     const entries: ChangelogEntry[] = [
       {
         source: "frontend",
-        sourceLabel: "Müşteri Sitesi",
+        sourceLabel: "Frontpages",
         version: "v1.2.0",
         date: "2026-05-12",
         environment: "BETA",
@@ -111,7 +111,7 @@ describe("filters", () => {
     const entries: ChangelogEntry[] = [
       {
         source: "frontend",
-        sourceLabel: "Müşteri Sitesi",
+        sourceLabel: "Frontpages",
         version: "v1.2.0",
         date: "2026-05-12",
         environment: "BETA",

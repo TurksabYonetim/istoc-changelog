@@ -34,14 +34,14 @@ export interface ParseError {
 
 export const SOURCE_LABELS: Record<Source, string> = {
   backend: "Backend",
-  frontend: "Müşteri Sitesi",
-  admin: "Yönetim Paneli",
+  frontend: "Frontpages",
+  admin: "Admin",
 };
 
 export const TYPE_LABELS: Record<ChangeType, string> = {
-  added: "Yeni Özellik",
-  fixed: "Düzeltme",
-  changed: "İyileştirme",
+  added: "feature",
+  fixed: "Fixed",
+  changed: "improvement",
 };
 
 export const ENV_LABELS: Record<Environment, string> = {
