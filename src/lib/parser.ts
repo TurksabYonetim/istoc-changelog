@@ -209,12 +209,12 @@ export function deduplicateEntries(entries: ChangelogEntry[]): ChangelogEntry[] 
 }
 
 /**
- * Removes duplicate items across entries — if the same change text appears in
- * multiple versions (e.g. a fix carried through beta → rc → prod), keep only
- * the FIRST occurrence (earliest version chronologically). Subsequent entries
- * lose that item. Entries that end up empty are dropped.
+ * Removes duplicate items across entries within the same environment. The same
+ * feat carried through BETA → RC → PROD is preserved in all three environments
+ * (so users can see it move through the pipeline). Duplicates within the same
+ * source+environment (e.g. .10 and .12 beta tags both listing the same commit
+ * because of a workflow PREV bug) keep only the FIRST occurrence chronologically.
  *
- * Duplicates compared per-source: identical text in different repos is preserved.
  * Normalization strips trailing "(@author)" attribution and lowercases for match.
  */
 export function deduplicateItems(entries: ChangelogEntry[]): ChangelogEntry[] {
@@ -229,7 +229,7 @@ export function deduplicateItems(entries: ChangelogEntry[]): ChangelogEntry[] {
 
   for (const entry of sortedAsc) {
     const keptItems = entry.items.filter((item) => {
-      const key = `${entry.source}|${item.type}|${normalizeItemText(item.text)}`;
+      const key = `${entry.source}|${entry.environment}|${item.type}|${normalizeItemText(item.text)}`;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;

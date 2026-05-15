@@ -109,13 +109,18 @@ describe("parseChangelog", () => {
 
 describe("deduplicateItems", () => {
   // Helper — admin source'lu basit bir entry oluştur
-  function adminEntry(version: string, date: string, texts: string[]): ChangelogEntry {
+  function adminEntry(
+    version: string,
+    date: string,
+    texts: string[],
+    environment: ChangelogEntry["environment"] = "BETA",
+  ): ChangelogEntry {
     return {
       source: "admin",
       sourceLabel: "Admin",
       version,
       date,
-      environment: "BETA",
+      environment,
       items: texts.map((text, i) => ({ id: `${version}-${i}`, type: "added", text })),
     };
   }
@@ -171,5 +176,34 @@ describe("deduplicateItems", () => {
     const result = deduplicateItems(entries);
     expect(result).toHaveLength(1); // duplicate sayılır, .1.1 drop
     expect(result[0].version).toBe("v1.1.0");
+  });
+
+  it("aynı item BETA → RC → PROD pipeline'ında ilerlerse her environment'ta korunur", () => {
+    // Promote akışı: beta'da test edilen feat, RC'de UAT'ye, PROD'da canlıya geçer.
+    // Site kullanıcısı her aşamayı ayrı görmeli — dedupe sadece aynı environment
+    // içindeki tekrarları temizler.
+    const entries: ChangelogEntry[] = [
+      adminEntry("v1.1.9-beta.1", "2026-05-13", ["feat(x): yeni özellik"], "BETA"),
+      adminEntry("v1.1.9-rc.1", "2026-05-14", ["feat(x): yeni özellik"], "RC"),
+      adminEntry("v1.1.9", "2026-05-15", ["feat(x): yeni özellik"], "PROD"),
+    ];
+    const result = deduplicateItems(entries);
+    expect(result).toHaveLength(3);
+    expect(result.map((e) => e.environment).sort()).toEqual(["BETA", "PROD", "RC"]);
+    for (const entry of result) {
+      expect(entry.items).toHaveLength(1);
+    }
+  });
+
+  it("aynı environment'ta birden fazla release'de tekrar eden item drop edilir (regression guard)", () => {
+    // Önceki workflow PREV bug'ı senaryosu — environment-aware olduktan sonra da
+    // aynı environment içinde dedupe çalışmalı.
+    const entries: ChangelogEntry[] = [
+      adminEntry("v1.1.9-rc.1", "2026-05-14", ["feat(x): aynı"], "RC"),
+      adminEntry("v1.1.9-rc.2", "2026-05-15", ["feat(x): aynı"], "RC"),
+    ];
+    const result = deduplicateItems(entries);
+    expect(result).toHaveLength(1);
+    expect(result[0].version).toBe("v1.1.9-rc.1"); // önceki RC tutulur
   });
 });
