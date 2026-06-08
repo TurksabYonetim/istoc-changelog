@@ -1,12 +1,20 @@
 import { AtSign, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ChangeItem as Item } from "../types/changelog";
+import { HighlightedText, textMatchesQuery } from "../lib/highlight";
 
 interface Props {
   item: Item;
   /** Visual nesting depth — 0 for top-level, >0 for sub-items. */
   depth?: number;
+  query?: string;
+}
+
+/** Item kendisi veya herhangi bir alt item'ı sorgu ile eşleşiyor mu? */
+function matchesQuery(item: Item, query: string): boolean {
+  if (textMatchesQuery(item.text, query)) return true;
+  return item.children?.some((c) => matchesQuery(c, query)) ?? false;
 }
 
 const SHORT_LABEL: Record<Item["type"], string> = {
@@ -34,11 +42,17 @@ function parseItem(raw: string): ParsedItem {
   return { text: raw.trim(), author: null };
 }
 
-export function ChangeItem({ item, depth = 0 }: Props) {
+export function ChangeItem({ item, depth = 0, query = "" }: Props) {
   const { text, author } = parseItem(item.text);
   const hasChildren = !!item.children && item.children.length > 0;
   const [open, setOpen] = useState(false);
   const isSub = depth > 0;
+
+  // Arama varken eşleşen detayı açıp açık tutar ki vurgulanan satır görünsün.
+  const childMatches = hasChildren && query.trim().length > 0 && matchesQuery(item, query);
+  useEffect(() => {
+    if (childMatches) setOpen(true);
+  }, [childMatches, query]);
 
   const toggle = () => setOpen((o) => !o);
   const onRowKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -55,7 +69,9 @@ export function ChangeItem({ item, depth = 0 }: Props) {
         <div className="flex items-baseline gap-2 py-1.5 pl-3 sm:pl-4">
           <span className="text-muted">•</span>
           <div className="min-w-0 flex-1">
-            <p className="break-words text-[12.5px] leading-[1.5] text-ink-2">{text}</p>
+            <p className="break-words text-[12.5px] leading-[1.5] text-ink-2">
+              <HighlightedText text={text} query={query} />
+            </p>
             {author && (
               <a
                 href={`https://github.com/${author}`}
@@ -104,7 +120,9 @@ export function ChangeItem({ item, depth = 0 }: Props) {
           </span>
 
           <div className="min-w-0 flex-1">
-            <p className="break-words text-[13.5px] leading-[1.5] text-ink">{text}</p>
+            <p className="break-words text-[13.5px] leading-[1.5] text-ink">
+              <HighlightedText text={text} query={query} />
+            </p>
             {author && (
               <a
                 href={`https://github.com/${author}`}
@@ -135,7 +153,7 @@ export function ChangeItem({ item, depth = 0 }: Props) {
             >
               <ul className="mb-2 ml-7 border-l-2 border-border/60 pl-2 sm:ml-9 sm:pl-3">
                 {item.children!.map((c) => (
-                  <ChangeItem key={c.id} item={c} depth={depth + 1} />
+                  <ChangeItem key={c.id} item={c} depth={depth + 1} query={query} />
                 ))}
               </ul>
             </motion.div>

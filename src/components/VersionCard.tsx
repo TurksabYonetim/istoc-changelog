@@ -8,6 +8,7 @@ import { ChangeItem } from "./ChangeItem";
 interface Props {
   entry: ChangelogEntry;
   defaultOpen?: boolean;
+  query?: string;
 }
 
 const COUNT_CONFIG: Record<ChangeType, { label: string; cls: string }> = {
@@ -22,10 +23,19 @@ const ENV_PILL: Record<ChangelogEntry["environment"], string> = {
   BETA: "pill-info",
 };
 
-export function VersionCard({ entry, defaultOpen = false }: Props) {
+export function VersionCard({ entry, defaultOpen = false, query = "" }: Props) {
+  const hasQuery = query.trim().length > 0;
   const [open, setOpen] = useState(defaultOpen);
   const counts = countByType(entry);
   const recent = isRecent(entry.date);
+
+  // Aktif aramada bu kayıt zaten eşleştiği için filtreden geçmiştir; sorgu
+  // değiştiğinde otomatik açarız (kullanıcı sonradan elle kapatabilir).
+  const [prevQuery, setPrevQuery] = useState(query);
+  if (query !== prevQuery) {
+    setPrevQuery(query);
+    if (hasQuery) setOpen(true);
+  }
 
   return (
     <article className="card-lift overflow-hidden rounded-xl border border-border bg-surface shadow-[var(--shadow-sm)]">
@@ -77,7 +87,7 @@ export function VersionCard({ entry, defaultOpen = false }: Props) {
             className="overflow-hidden border-t border-border"
           >
             <ul className="px-4 py-1 sm:px-5">
-              {entry.items.map((i) => <ChangeItem key={i.id} item={i} />)}
+              {entry.items.map((i) => <ChangeItem key={i.id} item={i} query={query} />)}
             </ul>
           </motion.div>
         )}

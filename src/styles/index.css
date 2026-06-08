@@ -111,6 +111,14 @@ body {
   color: #1a1a1a;
 }
 
+.search-hit {
+  background: var(--color-brand);
+  color: #1a1a1a;
+  border-radius: 3px;
+  padding: 0 2px;
+  font-weight: 600;
+}
+
 :focus-visible {
   outline: 2px solid var(--color-brand);
   outline-offset: 2px;

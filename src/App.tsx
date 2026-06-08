@@ -58,7 +58,9 @@ export default function App() {
 
           {state.status === "ready" && filtered.length === 0 && <EmptyState onReset={reset} />}
 
-          {state.status === "ready" && filtered.length > 0 && <Timeline entries={filtered} />}
+          {state.status === "ready" && filtered.length > 0 && (
+            <Timeline entries={filtered} query={filters.query} />
+          )}
         </main>
       </div>
 

@@ -3,9 +3,10 @@ import { VersionCard } from "./VersionCard";
 
 interface Props {
   entries: ChangelogEntry[];
+  query: string;
 }
 
-export function Timeline({ entries }: Props) {
+export function Timeline({ entries, query }: Props) {
   return (
     <div className="flex flex-col gap-3">
       {entries.map((entry, idx) => (
@@ -13,6 +14,7 @@ export function Timeline({ entries }: Props) {
           key={`${entry.source}-${entry.version}`}
           entry={entry}
           defaultOpen={idx < 2}
+          query={query}
         />
       ))}
     </div>
