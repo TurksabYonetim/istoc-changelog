@@ -1,4 +1,4 @@
-import { Moon, Palette, Search, Sun, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Moon, Palette, Search, Sun, X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useTheme } from "../hooks/useTheme";
 import { formatDateTime } from "../lib/format";
@@ -8,9 +8,23 @@ interface Props {
   totalEntries?: number;
   query: string;
   onQueryChange: (q: string) => void;
+  matchCount: number;
+  /** Aktif eşleşmenin 0-tabanlı indeksi; henüz seçim yoksa -1. */
+  currentMatch: number;
+  onPrevMatch: () => void;
+  onNextMatch: () => void;
 }
 
-export function Header({ generatedAt, totalEntries, query, onQueryChange }: Props) {
+export function Header({
+  generatedAt,
+  totalEntries,
+  query,
+  onQueryChange,
+  matchCount,
+  currentMatch,
+  onPrevMatch,
+  onNextMatch,
+}: Props) {
   const { theme, cycle } = useTheme();
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -71,17 +85,47 @@ export function Header({ generatedAt, totalEntries, query, onQueryChange }: Prop
             onChange={(e) => onQueryChange(e.target.value)}
             placeholder="Tüm kayıtlarda ara: KYB, sepet, v1.1.7…"
             aria-label="Tüm kayıtlarda ara"
-            className="input-base !py-2 !pl-9 !pr-9 !text-[13px]"
+            className={`input-base !py-2 !pl-9 !text-[13px] ${query ? "!pr-[150px]" : "!pr-9"}`}
           />
           {query && (
-            <button
-              type="button"
-              onClick={() => onQueryChange("")}
-              aria-label="Aramayı temizle"
-              className="icon-btn absolute right-1 top-1/2 -translate-y-1/2 !p-1.5"
-            >
-              <X size={12} />
-            </button>
+            <div className="absolute right-1.5 top-1/2 flex -translate-y-1/2 items-center gap-1">
+              <span
+                className="font-mono text-[11px] tabular-nums text-muted"
+                aria-live="polite"
+              >
+                {matchCount === 0
+                  ? "0 sonuç"
+                  : `${currentMatch >= 0 ? currentMatch + 1 : "–"} / ${matchCount}`}
+              </span>
+              <button
+                type="button"
+                onClick={onPrevMatch}
+                disabled={matchCount === 0}
+                aria-label="Önceki eşleşme"
+                title="Önceki eşleşme"
+                className="icon-btn !p-1 disabled:opacity-40"
+              >
+                <ChevronUp size={14} />
+              </button>
+              <button
+                type="button"
+                onClick={onNextMatch}
+                disabled={matchCount === 0}
+                aria-label="Sonraki eşleşme"
+                title="Sonraki eşleşme"
+                className="icon-btn !p-1 disabled:opacity-40"
+              >
+                <ChevronDown size={14} />
+              </button>
+              <button
+                type="button"
+                onClick={() => onQueryChange("")}
+                aria-label="Aramayı temizle"
+                className="icon-btn !p-1.5"
+              >
+                <X size={12} />
+              </button>
+            </div>
           )}
         </div>
 

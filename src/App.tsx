@@ -1,12 +1,12 @@
 import { Loader2 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { EmptyState } from "./components/EmptyState";
 import { FilterMobileBar, FilterSidebar } from "./components/FilterBar";
 import { Header } from "./components/Header";
 import { Timeline } from "./components/Timeline";
 import { useChangelogData } from "./hooks/useChangelogData";
 import { useFilters } from "./hooks/useFilters";
-import { applyFilters } from "./lib/filters";
+import { applyFilters, countMatches } from "./lib/filters";
 
 export default function App() {
   const state = useChangelogData();
@@ -18,6 +18,29 @@ export default function App() {
   );
   const filtered = useMemo(() => applyFilters(entries, filters), [entries, filters]);
   const resultCount = filtered.reduce((acc, e) => acc + e.items.length, 0);
+
+  // Vurgulanan kelime sayacı + ▲▼ gezinme (tarayıcı "bul" davranışı gibi).
+  const matchCount = useMemo(
+    () => countMatches(filtered, filters.query),
+    [filtered, filters.query],
+  );
+  const [currentMatch, setCurrentMatch] = useState(-1);
+  // Sorgu değişince aktif eşleşmeyi sıfırla (render sırasında, effect'siz).
+  const [prevQuery, setPrevQuery] = useState(filters.query);
+  if (filters.query !== prevQuery) {
+    setPrevQuery(filters.query);
+    setCurrentMatch(-1);
+  }
+
+  const goToMatch = (delta: 1 | -1) => {
+    const marks = document.querySelectorAll<HTMLElement>(".search-hit");
+    if (marks.length === 0) return;
+    const base = currentMatch < 0 ? (delta > 0 ? -1 : 0) : currentMatch;
+    const idx = (((base + delta) % marks.length) + marks.length) % marks.length;
+    marks.forEach((m, i) => m.classList.toggle("search-hit--active", i === idx));
+    marks[idx].scrollIntoView({ behavior: "smooth", block: "center" });
+    setCurrentMatch(idx);
+  };
 
   const filterProps = {
     filters,
@@ -34,6 +57,10 @@ export default function App() {
         totalEntries={state.status === "ready" ? state.data.entries.length : undefined}
         query={filters.query}
         onQueryChange={(q) => setFilters({ ...filters, query: q })}
+        matchCount={matchCount}
+        currentMatch={currentMatch}
+        onPrevMatch={() => goToMatch(-1)}
+        onNextMatch={() => goToMatch(1)}
       />
 
       {state.status === "ready" && <FilterMobileBar {...filterProps} />}

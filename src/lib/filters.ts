@@ -7,6 +7,7 @@ import type {
   Source,
 } from "../types/changelog";
 import { authorIdFromHandle, extractAuthorHandle } from "../types/changelog";
+import { parseItem } from "./parseItem";
 
 const ALL_SOURCES: Source[] = ["backend", "frontend", "admin"];
 const ALL_TYPES: ChangeType[] = ["added", "fixed", "changed"];
@@ -79,6 +80,33 @@ export function applyFilters(
 export function textMatchesQuery(text: string, query: string): boolean {
   const q = query.trim();
   return q ? text.toLocaleLowerCase("tr").includes(q.toLocaleLowerCase("tr")) : false;
+}
+
+function countOccurrences(haystack: string, needle: string): number {
+  let count = 0;
+  for (let i = haystack.indexOf(needle); i !== -1; i = haystack.indexOf(needle, i + needle.length)) {
+    count++;
+  }
+  return count;
+}
+
+/**
+ * Toplam vurgulanabilir eşleşme sayısı — HighlightedText ile aynı `parseItem`
+ * metnini ve Türkçe locale'i kullandığı için DOM'daki `.search-hit` sayısına
+ * birebir eşittir; gezinme sayacı bu değere dayanır.
+ */
+export function countMatches(entries: ChangelogEntry[], query: string): number {
+  const q = query.trim().toLocaleLowerCase("tr");
+  if (!q) return 0;
+  let total = 0;
+  const walk = (items: ChangeItem[]) => {
+    for (const it of items) {
+      total += countOccurrences(parseItem(it.text).text.toLocaleLowerCase("tr"), q);
+      if (it.children) walk(it.children);
+    }
+  };
+  for (const e of entries) walk(e.items);
+  return total;
 }
 
 function collectItemText(item: ChangeItem): string[] {

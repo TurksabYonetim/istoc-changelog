@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { ChangeItem as Item } from "../types/changelog";
 import { HighlightedText } from "../lib/highlight";
 import { textMatchesQuery } from "../lib/filters";
+import { parseItem } from "../lib/parseItem";
 
 interface Props {
   item: Item;
@@ -29,19 +30,6 @@ const PILL_CLASS: Record<Item["type"], string> = {
   fixed: "pill-warn",
   changed: "pill-info",
 };
-
-interface ParsedItem {
-  text: string;
-  author: string | null;
-}
-
-function parseItem(raw: string): ParsedItem {
-  const match = raw.match(/^(.*?)\s*\(@([\w-]+)\)\s*$/);
-  if (match) {
-    return { text: match[1].trim(), author: match[2] };
-  }
-  return { text: raw.trim(), author: null };
-}
 
 export function ChangeItem({ item, depth = 0, query = "" }: Props) {
   const { text, author } = parseItem(item.text);

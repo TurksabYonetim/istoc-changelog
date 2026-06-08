@@ -117,6 +117,14 @@ body {
   border-radius: 3px;
   padding: 0 2px;
   font-weight: 600;
+  /* Sticky header altında kalmasın diye gezinme scroll'unda üstten boşluk */
+  scroll-margin-top: 96px;
+}
+
+.search-hit--active {
+  background: var(--color-brand-700);
+  color: #fff;
+  box-shadow: 0 0 0 2px var(--color-brand-700);
 }
 
 :focus-visible {
