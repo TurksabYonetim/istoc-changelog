@@ -1,4 +1,4 @@
-import { Check, Link as LinkIcon, RotateCcw, Search, SlidersHorizontal, X } from "lucide-react";
+import { Check, Link as LinkIcon, RotateCcw, SlidersHorizontal } from "lucide-react";
 import { useMemo, useState } from "react";
 import type { FilterState } from "../lib/filters";
 import type {
@@ -83,30 +83,6 @@ function FilterPanel({ filters, setFilters, reset, entries, resultCount }: Commo
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="relative">
-        <Search
-          size={14}
-          className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
-        />
-        <input
-          type="search"
-          value={filters.query}
-          onChange={(e) => setFilters({ ...filters, query: e.target.value })}
-          placeholder="ara: KYB, sepet, v1.1.7…"
-          className="input-base !py-2 !pl-9 !pr-9 !text-[13px]"
-        />
-        {filters.query && (
-          <button
-            type="button"
-            onClick={() => setFilters({ ...filters, query: "" })}
-            aria-label="Aramayı temizle"
-            className="icon-btn absolute right-1 top-1/2 -translate-y-1/2 !p-1.5"
-          >
-            <X size={12} />
-          </button>
-        )}
-      </div>
-
       <DimensionGroup
         label="Modül"
         values={SOURCES}

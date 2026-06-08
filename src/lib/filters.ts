@@ -11,7 +11,7 @@ import { authorIdFromHandle, extractAuthorHandle } from "../types/changelog";
 const ALL_SOURCES: Source[] = ["backend", "frontend", "admin"];
 const ALL_TYPES: ChangeType[] = ["added", "fixed", "changed"];
 const ALL_ENVS: Environment[] = ["BETA", "RC", "PROD"];
-const ALL_AUTHORS: Author[] = ["ahmet", "bora", "ali"];
+const ALL_AUTHORS: Author[] = ["ahmet", "bora", "ali", "aliturgut"];
 
 export interface FilterState {
   sources: Set<Source>;

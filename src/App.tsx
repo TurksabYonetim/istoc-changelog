@@ -32,6 +32,8 @@ export default function App() {
       <Header
         generatedAt={state.status === "ready" ? state.data.generatedAt : undefined}
         totalEntries={state.status === "ready" ? state.data.entries.length : undefined}
+        query={filters.query}
+        onQueryChange={(q) => setFilters({ ...filters, query: q })}
       />
 
       {state.status === "ready" && <FilterMobileBar {...filterProps} />}
