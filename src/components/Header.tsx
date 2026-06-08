@@ -1,4 +1,5 @@
 import { Moon, Palette, Search, Sun, X } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { useTheme } from "../hooks/useTheme";
 import { formatDateTime } from "../lib/format";
 
@@ -11,6 +12,15 @@ interface Props {
 
 export function Header({ generatedAt, totalEntries, query, onQueryChange }: Props) {
   const { theme, cycle } = useTheme();
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  // Sayfa açıldığında arama kutusu focus'lu gelsin; mevcut metin varsa tümü seçili
+  // gelsin ki kullanıcı doğrudan yazmaya başlayıp üzerine yazabilsin.
+  useEffect(() => {
+    searchRef.current?.focus();
+    searchRef.current?.select();
+  }, []);
+
   const ThemeIcon = theme === "dark" ? Sun : theme === "brand" ? Palette : Moon;
   const themeLabel =
     theme === "dark" ? "Aydınlık tema" : theme === "brand" ? "Marka teması" : "Karanlık tema";
@@ -55,6 +65,7 @@ export function Header({ generatedAt, totalEntries, query, onQueryChange }: Prop
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
           />
           <input
+            ref={searchRef}
             type="search"
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
