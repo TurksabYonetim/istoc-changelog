@@ -1,8 +1,9 @@
 import { AtSign, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { ChangeItem as Item } from "../types/changelog";
-import { HighlightedText, textMatchesQuery } from "../lib/highlight";
+import { HighlightedText } from "../lib/highlight";
+import { textMatchesQuery } from "../lib/filters";
 
 interface Props {
   item: Item;
@@ -50,9 +51,11 @@ export function ChangeItem({ item, depth = 0, query = "" }: Props) {
 
   // Arama varken eşleşen detayı açıp açık tutar ki vurgulanan satır görünsün.
   const childMatches = hasChildren && query.trim().length > 0 && matchesQuery(item, query);
-  useEffect(() => {
+  const [prevQuery, setPrevQuery] = useState(query);
+  if (query !== prevQuery) {
+    setPrevQuery(query);
     if (childMatches) setOpen(true);
-  }, [childMatches, query]);
+  }
 
   const toggle = () => setOpen((o) => !o);
   const onRowKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {

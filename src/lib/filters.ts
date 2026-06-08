@@ -75,6 +75,12 @@ export function applyFilters(
     });
 }
 
+/** Tek bir metin parçası, serbest arama sorgusu ile eşleşiyor mu? */
+export function textMatchesQuery(text: string, query: string): boolean {
+  const q = query.trim();
+  return q ? text.toLocaleLowerCase("tr").includes(q.toLocaleLowerCase("tr")) : false;
+}
+
 function collectItemText(item: ChangeItem): string[] {
   const own = [item.text];
   if (item.children && item.children.length > 0) {

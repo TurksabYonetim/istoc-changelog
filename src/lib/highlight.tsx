@@ -29,9 +29,3 @@ export function HighlightedText({ text, query }: { text: string; query: string }
 
   return <>{parts}</>;
 }
-
-/** Metin (ve isteğe bağlı alt metinler) sorgu ile eşleşiyor mu? */
-export function textMatchesQuery(text: string, query: string): boolean {
-  const q = query.trim();
-  return q ? lower(text).includes(lower(q)) : false;
-}
