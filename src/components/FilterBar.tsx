@@ -1,6 +1,6 @@
 import { Check, Link as LinkIcon, RotateCcw, SlidersHorizontal } from "lucide-react";
 import { useMemo, useState } from "react";
-import type { FilterState } from "../lib/filters";
+import { applyFilters, type FilterState } from "../lib/filters";
 import type {
   Author,
   ChangelogEntry,
@@ -42,7 +42,7 @@ const DATE_PRESETS: { key: string; label: string; days: number | null }[] = [
 
 /** Shared content panel — used both in mobile drawer and desktop sidebar */
 function FilterPanel({ filters, setFilters, reset, entries, resultCount }: CommonProps) {
-  const counts = useMemo(() => countByDimension(entries), [entries]);
+  const counts = useMemo(() => countByDimension(entries, filters), [entries, filters]);
 
   const toggleSet = <T,>(set: Set<T>, val: T): Set<T> => {
     const next = new Set(set);
@@ -293,19 +293,37 @@ function computePastDate(daysAgo: number): string {
   return new Date(ms).toISOString().slice(0, 10);
 }
 
-function countByDimension(entries: ChangelogEntry[]) {
+/**
+ * Faceted sayım: her boyutun değerleri, o boyutun KENDİ filtresi hariç diğer tüm
+ * aktif filtreler uygulanmış halde sayılır. Böylece bir boyutta seçim yapmak o
+ * boyuttaki diğer seçeneklerin sayısını yok etmez, ama diğer boyutlardaki
+ * seçimler bu sayıları daraltır. Sayım birimi `resultCount` ile aynı: kayıt
+ * (item) adedi — yani "bunu seçersem kaç kayıt kalır".
+ */
+function countByDimension(entries: ChangelogEntry[], filters: FilterState) {
+  const sourceBase = applyFilters(entries, { ...filters, sources: new Set() });
+  const typeBase = applyFilters(entries, { ...filters, types: new Set() });
+  const envBase = applyFilters(entries, { ...filters, environments: new Set() });
+  const authorBase = applyFilters(entries, { ...filters, authors: new Set() });
+
   const sources: Record<string, number> = {};
-  const types: Record<string, number> = {};
+  for (const e of sourceBase) sources[e.source] = (sources[e.source] ?? 0) + e.items.length;
+
   const envs: Record<string, number> = {};
+  for (const e of envBase) envs[e.environment] = (envs[e.environment] ?? 0) + e.items.length;
+
+  const types: Record<string, number> = {};
+  for (const e of typeBase) {
+    for (const i of e.items) types[i.type] = (types[i.type] ?? 0) + 1;
+  }
+
   const authors: Record<string, number> = {};
-  for (const e of entries) {
-    sources[e.source] = (sources[e.source] ?? 0) + 1;
-    envs[e.environment] = (envs[e.environment] ?? 0) + 1;
+  for (const e of authorBase) {
     for (const i of e.items) {
-      types[i.type] = (types[i.type] ?? 0) + 1;
       const id = authorIdFromHandle(extractAuthorHandle(i.text));
       if (id) authors[id] = (authors[id] ?? 0) + 1;
     }
   }
+
   return { sources, types, envs, authors };
 }
