@@ -27,7 +27,7 @@ interface CommonProps {
 
 const SOURCES: Source[] = ["backend", "frontend", "admin"];
 const TYPES: ChangeType[] = ["added", "fixed", "changed"];
-const ENVS: Environment[] = ["PROD", "RC", "BETA"];
+const ENVS: Environment[] = ["PROD", "RC", "BETA", "ALPHA"];
 const AUTHOR_IDS: Author[] = AUTHORS.map((a) => a.id);
 const AUTHOR_LABEL: Record<Author, string> = Object.fromEntries(
   AUTHORS.map((a) => [a.id, a.label]),

@@ -11,7 +11,7 @@ import type {
 } from "../types/changelog";
 import { SOURCE_LABELS } from "../types/changelog";
 
-const VERSION_HEADING_RE = /^\[(v[^\]]+)\]\s*-\s*(\d{4}-\d{2}-\d{2})\s+(BETA|RC|PROD)\s*$/;
+const VERSION_HEADING_RE = /^\[(v[^\]]+)\]\s*-\s*(\d{4}-\d{2}-\d{2})\s+(ALPHA|BETA|RC|PROD)\s*$/;
 
 const SECTION_TYPE_MAP: Record<string, ChangeType> = {
   eklendi: "added",

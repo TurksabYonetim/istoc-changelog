@@ -21,6 +21,7 @@ const ENV_PILL: Record<ChangelogEntry["environment"], string> = {
   PROD: "pill-ok",
   RC: "pill-warn",
   BETA: "pill-info",
+  ALPHA: "pill-alpha",
 };
 
 export function VersionCard({ entry, defaultOpen = false, query = "" }: Props) {

@@ -69,6 +69,27 @@ describe("parseChangelog", () => {
     expect(dates).toEqual([...dates].sort((a, b) => b.localeCompare(a)));
   });
 
+  it("parses ALPHA environment headings", () => {
+    const md = [
+      "## [v1.5.0-alpha.11] - 2026-07-03 ALPHA",
+      "",
+      "### Eklendi",
+      "",
+      "- feat(x): alpha ortamına yeni özellik eklendi (@ahmeetseker)",
+      "",
+    ].join("\n");
+
+    const { entries, errors } = parseChangelog(md, "frontend");
+    expect(errors).toEqual([]);
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({
+      version: "v1.5.0-alpha.11",
+      date: "2026-07-03",
+      environment: "ALPHA",
+    });
+    expect(entries[0].items).toHaveLength(1);
+  });
+
   it("parses nested list items as children, not flattened text", () => {
     const md = [
       "## [v1.0.0] - 2026-05-01 BETA",

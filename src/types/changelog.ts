@@ -1,6 +1,6 @@
 export type Source = "backend" | "frontend" | "admin";
 
-export type Environment = "BETA" | "RC" | "PROD";
+export type Environment = "ALPHA" | "BETA" | "RC" | "PROD";
 
 export type ChangeType = "added" | "fixed" | "changed";
 
@@ -45,6 +45,7 @@ export const TYPE_LABELS: Record<ChangeType, string> = {
 };
 
 export const ENV_LABELS: Record<Environment, string> = {
+  ALPHA: "Alpha",
   BETA: "Beta",
   RC: "RC",
   PROD: "PROD",

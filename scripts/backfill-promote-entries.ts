@@ -54,7 +54,7 @@ const aggregated: { Eklendi: string[]; Duzeltildi: string[]; Degistirildi: strin
 const betaPrefix = `${lastProd}-beta.`;
 
 for (const block of blocks) {
-  const headingMatch = block.match(/^## \[([^\]]+)\] - \d{4}-\d{2}-\d{2} (BETA|RC|PROD)/);
+  const headingMatch = block.match(/^## \[([^\]]+)\] - \d{4}-\d{2}-\d{2} (ALPHA|BETA|RC|PROD)/);
   if (!headingMatch) continue;
   const [, ver, env] = headingMatch;
   if (env !== "BETA") continue;
