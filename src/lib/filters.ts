@@ -6,13 +6,13 @@ import type {
   Environment,
   Source,
 } from "../types/changelog";
-import { authorIdFromHandle, extractAuthorHandle } from "../types/changelog";
+import { AUTHORS, authorIdFromHandle, extractAuthorHandle } from "../types/changelog";
 import { parseItem } from "./parseItem";
 
 const ALL_SOURCES: Source[] = ["backend", "frontend", "admin"];
 const ALL_TYPES: ChangeType[] = ["added", "fixed", "changed"];
 const ALL_ENVS: Environment[] = ["ALPHA", "BETA", "RC", "PROD"];
-const ALL_AUTHORS: Author[] = ["ahmet", "bora", "ali", "aliturgut"];
+const ALL_AUTHORS: Author[] = AUTHORS.map((a) => a.id);
 
 export interface FilterState {
   sources: Set<Source>;

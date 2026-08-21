@@ -51,13 +51,15 @@ export const ENV_LABELS: Record<Environment, string> = {
   PROD: "PROD",
 };
 
-export type Author = "ahmet" | "bora" | "ali" | "aliturgut";
+export type Author = "ahmet" | "bora" | "ali" | "aliturgut" | "metin" | "sefa";
 
 export const AUTHORS: { id: Author; label: string; handles: string[] }[] = [
   { id: "ahmet", label: "Ahmet", handles: ["ahmeetseker"] },
   { id: "bora", label: "Bora", handles: ["boraydeger32"] },
   { id: "ali", label: "Ali", handles: ["aliiball"] },
   { id: "aliturgut", label: "Ali Turgut", handles: ["aliturguttursab"] },
+  { id: "metin", label: "Metin", handles: ["Metin15978"] },
+  { id: "sefa", label: "Sefa", handles: ["Sefa4444"] },
 ];
 
 const HANDLE_TO_AUTHOR: Record<string, Author> = Object.fromEntries(
