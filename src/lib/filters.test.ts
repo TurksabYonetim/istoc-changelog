@@ -6,7 +6,7 @@ import {
   filtersToQuery,
   type FilterState,
 } from "./filters";
-import type { ChangelogEntry } from "../types/changelog";
+import { authorIdFromHandle, extractAuthorHandle, type ChangelogEntry } from "../types/changelog";
 
 const sample: ChangelogEntry[] = [
   {
@@ -120,5 +120,22 @@ describe("filters", () => {
       ...sample,
     ];
     expect(applyFilters(entries, defaultFilters())).toHaveLength(2);
+  });
+});
+
+describe("author handle extraction", () => {
+  it("matches plain github handles", () => {
+    expect(authorIdFromHandle(extractAuthorHandle("fix: x (@ahmeetseker)"))).toBe("ahmet");
+  });
+  it("maps display name with space to metin", () => {
+    expect(authorIdFromHandle(extractAuthorHandle("feat(media): y (@Metin Bektemur)"))).toBe(
+      "metin",
+    );
+    expect(authorIdFromHandle(extractAuthorHandle("feat: z (@Metin15978)"))).toBe("metin");
+  });
+  it("does not match non-author parens", () => {
+    expect(
+      authorIdFromHandle(extractAuthorHandle("feat: (@container/sc breakpoint'leri)")),
+    ).toBeNull();
   });
 });

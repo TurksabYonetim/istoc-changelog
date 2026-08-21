@@ -58,7 +58,7 @@ export const AUTHORS: { id: Author; label: string; handles: string[] }[] = [
   { id: "bora", label: "Bora", handles: ["boraydeger32"] },
   { id: "ali", label: "Ali", handles: ["aliiball"] },
   { id: "aliturgut", label: "Ali Turgut", handles: ["aliturguttursab"] },
-  { id: "metin", label: "Metin", handles: ["Metin15978"] },
+  { id: "metin", label: "Metin", handles: ["Metin15978", "Metin Bektemur"] },
   { id: "sefa", label: "Sefa", handles: ["Sefa4444"] },
 ];
 
@@ -66,7 +66,8 @@ const HANDLE_TO_AUTHOR: Record<string, Author> = Object.fromEntries(
   AUTHORS.flatMap((a) => a.handles.map((h) => [h.toLocaleLowerCase("tr"), a.id])),
 );
 
-const AUTHOR_RE = /\(@([\w-]+)\)\s*$/;
+// Handle (ahmeetseker) veya bosluklu gorunen ad (Metin Bektemur) olabilir.
+const AUTHOR_RE = /\(@([\p{L}\p{N}_-]+(?: [\p{L}\p{N}_-]+)*)\)\s*$/u;
 
 export function extractAuthorHandle(text: string): string | null {
   return text.match(AUTHOR_RE)?.[1] ?? null;
