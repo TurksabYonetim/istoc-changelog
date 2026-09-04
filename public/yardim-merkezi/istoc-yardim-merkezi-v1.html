@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/tokens/radius.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/tokens/elevation.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/tokens/motion.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/tokens/layout.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/tokens/density.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/tokens/variants.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/tokens/base.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/components/primitives/primitives.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/components/forms/forms.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/components/data/data.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/components/navigation/navigation.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/components/feedback/feedback.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/components/ai/ai.css">
+  <link rel="stylesheet" href="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/styles.css">
+  <script src="_ds/aep-design-system-9eec25bb-9ad4-4a6a-8ae4-7f59074d8805/_ds_bundle.js"></script>
+  <script>document.documentElement.setAttribute('data-variant','f');document.documentElement.setAttribute('data-theme','light');document.documentElement.setAttribute('lang','tr');</script>
+  <style>
+    html,body{margin:0;background:#F7F7FB;color:#080616;font-family:Roboto,'Noto Sans',system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%}
+    a{color:#003399}a:hover{color:#080616}
+    *:focus-visible{outline:2px solid #003399;outline-offset:2px}
+    @media (prefers-reduced-motion:reduce){*{transition-duration:1ms!important;animation-duration:1ms!important}}
+  </style>
+</helmet>
+
+<a href="#icerik" style="position:absolute;inset-inline-start:16px;top:-64px;background:#FFB900;color:#080616;padding:12px 16px;border-radius:8px;font-weight:500;z-index:60;text-decoration:none" style-focus="top:16px">İçeriğe atla</a>
+
+<div data-screen-label="Yardım merkezi" style="min-height:100vh;display:flex;flex-direction:column;padding-bottom:{{ bottomPad }}">
+
+  <!-- Global header -->
+  <header style="position:sticky;top:0;z-index:40;background:#FFFFFF;border-bottom:1px solid #E4E4EE">
+    <div style="max-width:1296px;margin:0 auto;padding:0 clamp(16px,5vw,72px);min-height:64px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <a href="#" aria-label="İstoc ana sayfa" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:#080616;min-height:44px">
+        <span style="font-weight:700;font-size:1.5rem;letter-spacing:-0.02em">İSTOC</span>
+        <span aria-hidden="true" style="width:1px;height:24px;background:#E4E4EE"></span>
+        <span style="font-weight:500;font-size:1rem">Yardım merkezi</span>
+      </a>
+      <nav aria-label="Yardım merkezi" style="margin-inline-start:auto;display:flex;align-items:center;gap:4px;flex-wrap:wrap">
+        <a href="#taleplerim" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border-radius:8px;text-decoration:none;color:#080616;font-weight:500" style-hover="background:rgb(8 6 22 / 4%)">
+          <x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="ticket" size="20" hint-size="20px,20px"></x-import>
+          <span>Taleplerim</span>
+          <sc-if value="{{ signedIn }}" hint-placeholder-val="{{ true }}"><span style="background:#003399;color:#FFFFFF;border-radius:999px;padding:0 8px;font-size:1rem;font-variant-numeric:tabular-nums;line-height:24px" aria-label="2 açık talep">2</span></sc-if>
+        </a>
+        <button type="button" aria-haspopup="listbox" aria-label="Dil ve bölge: Türkçe, Türkiye" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:0;border-radius:8px;background:transparent;color:#080616;font:inherit;font-weight:500;cursor:pointer" style-hover="background:rgb(8 6 22 / 4%)">
+          <x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="globe" size="20" hint-size="20px,20px"></x-import>
+          <span>TR · Türkiye</span>
+          <x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="caret-down" size="20" hint-size="20px,20px"></x-import>
+        </button>
+        <sc-if value="{{ signedIn }}" hint-placeholder-val="{{ true }}">
+          <a href="#hesap" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border-radius:8px;text-decoration:none;color:#080616;font-weight:500" style-hover="background:rgb(8 6 22 / 4%)">
+            <span aria-hidden="true" style="width:32px;height:32px;border-radius:999px;background:#003399;color:#FFFFFF;display:grid;place-items:center;font-weight:500">ÖK</span>
+            <span>Öznur K.</span>
+          </a>
+        </sc-if>
+        <sc-if value="{{ signedOut }}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="AEPDesignSystem_9eec25.Button" variant="secondary" hint-size="auto,44px">Giriş yap</x-import>
+        </sc-if>
+      </nav>
+    </div>
+  </header>
+
+  <main id="icerik" tabindex="-1" style="flex:1;outline:none">
+
+    <!-- Hero: role + search -->
+    <section aria-labelledby="hero-baslik" style="background:#080616;color:rgb(255 255 255 / 87%)">
+      <div style="max-width:1296px;margin:0 auto;padding:32px clamp(16px,5vw,72px) 40px;display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+          <div role="group" aria-label="Kimin için yardım arıyorsunuz?" style="display:inline-flex;background:#16123A;border:1px solid #26224A;border-radius:8px;padding:4px;gap:4px">
+            <button type="button" aria-pressed="{{ isBuyer }}" onClick="{{ setBuyer }}" style="min-height:44px;padding:0 16px;border:0;border-radius:6px;font:inherit;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:{{ buyerBg }};color:{{ buyerFg }};transition:background 200ms ease-out">
+              <x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="shopping-cart" size="20" hint-size="20px,20px"></x-import>
+              <span>Alıcıyım</span>
+            </button>
+            <button type="button" aria-pressed="{{ isSeller }}" onClick="{{ setSeller }}" style="min-height:44px;padding:0 16px;border:0;border-radius:6px;font:inherit;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:{{ sellerBg }};color:{{ sellerFg }};transition:background 200ms ease-out">
+              <x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="storefront" size="20" hint-size="20px,20px"></x-import>
+              <span>Satıcıyım</span>
+            </button>
+          </div>
+          <h1 id="hero-baslik" style="margin:0;font-size:clamp(1.75rem,4vw,2.5rem);line-height:1.2;font-weight:700;color:#FFFFFF;text-wrap:pretty">{{ heroTitle }}</h1>
+          <p style="margin:0;color:rgb(255 255 255 / 60%);max-width:60ch;text-wrap:pretty">{{ heroSub }}</p>
+        </div>
+
+        <form role="search" aria-label="Yardım merkezinde ara" onSubmit="{{ onSearch }}" style="display:flex;flex-direction:column;gap:8px;max-width:720px;position:relative">
+          <label for="ara" style="font-weight:500;color:#FFFFFF">Sorunuzu yazın</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <div style="flex:1 1 240px;position:relative;display:flex;align-items:center">
+              <span aria-hidden="true" style="position:absolute;inset-inline-start:16px;display:flex;color:rgb(8 6 22 / 66%)"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="magnifying-glass" size="20" hint-size="20px,20px"></x-import></span>
+              <input id="ara" type="search" value="{{ query }}" onChange="{{ onQuery }}" autoComplete="off" aria-describedby="ara-yardim" aria-controls="ara-oneri" aria-expanded="{{ hasSuggestions }}" placeholder="Örn. sipariş takibi, iade, fatura" style="width:100%;box-sizing:border-box;min-height:52px;padding:0 16px 0 48px;border:1px solid transparent;border-radius:999px;background:#FFFFFF;color:#080616;font:inherit;font-size:1rem" style-focus="outline:2px solid #93A8F4;outline-offset:2px">
+            </div>
+            <x-import component-from-global-scope="AEPDesignSystem_9eec25.Button" variant="primary" icon-start="magnifying-glass" hint-size="auto,52px">Ara</x-import>
+          </div>
+          <p id="ara-yardim" style="margin:0;color:rgb(255 255 255 / 60%);font-size:1rem">Sipariş numarası (örn. IS-2026-48113) yazarsanız doğrudan siparişinize gideriz.</p>
+          <sc-if value="{{ hasSuggestions }}" hint-placeholder-val="{{ false }}">
+            <ul id="ara-oneri" role="listbox" aria-label="Öneriler" style="list-style:none;margin:0;padding:8px;background:#FFFFFF;color:#080616;border-radius:8px;box-shadow:0 4px 16px rgb(0 0 0 / 12%);position:absolute;top:100%;inset-inline:0;z-index:30;max-width:calc(100% - 96px)">
+              <sc-for list="{{ suggestions }}" as="s" hint-placeholder-count="3">
+                <li role="option" aria-selected="false" style="display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:6px;cursor:pointer" style-hover="background:rgb(8 6 22 / 4%)">
+                  <x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="{{ s.icon }}" size="20" hint-size="20px,20px"></x-import>
+                  <span style="flex:1">{{ s.label }}</span>
+                  <span style="color:rgb(8 6 22 / 66%)">{{ s.kind }}</span>
+                </li>
+              </sc-for>
+            </ul>
+          </sc-if>
+          <div role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">{{ liveMsg }}</div>
+        </form>
+
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+          <span style="color:rgb(255 255 255 / 60%)">Sık aranan:</span>
+          <sc-for list="{{ quickChips }}" as="c" hint-placeholder-count="4">
+            <a href="#" style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid #26224A;color:#FFFFFF;text-decoration:none;background:#0D0A24" style-hover="background:#16123A;border-color:#93A8F4">{{ c }}</a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- Personal context strip -->
+    <section aria-labelledby="durum-baslik" style="max-width:1296px;margin:0 auto;padding:24px clamp(16px,5vw,72px) 0;box-sizing:border-box;width:100%">
+      <h2 id="durum-baslik" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Sizinle ilgili durum</h2>
+      <sc-if value="{{ signedIn }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px">
+          <sc-for list="{{ contextCards }}" as="k" hint-placeholder-count="3">
+            <a href="#" style="display:flex;gap:16px;align-items:flex-start;padding:16px;background:#FFFFFF;border-radius:8px;box-shadow:0 2px 8px rgb(0 0 0 / 10%);text-decoration:none;color:#080616;transition:box-shadow 200ms ease-out" style-hover="box-shadow:0 4px 12px rgb(0 0 0 / 12%)">
+              <span style="display:flex;width:44px;height:44px;border-radius:8px;align-items:center;justify-content:center;flex:none;background:{{ k.fill }};color:{{ k.color }}">
+                <x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="{{ k.icon }}" size="24" weight="fill" hint-size="24px,24px"></x-import>
+              </span>
+              <span style="display:flex;flex-direction:column;gap:4px;min-width:0">
+                <span style="color:rgb(8 6 22 / 66%)">{{ k.eyebrow }}</span>
+                <span style="font-weight:500;font-variant-numeric:tabular-nums">{{ k.title }}</span>
+                <span style="display:inline-flex;align-items:center;gap:4px;color:{{ k.color }};font-weight:500"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="{{ k.statusIcon }}" size="20" hint-size="20px,20px"></x-import><span>{{ k.status }}</span></span>
+              </span>
+              <span style="margin-inline-start:auto;display:flex;color:rgb(8 6 22 / 66%)"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="caret-right" size="20" mirror-rtl="{{ true }}" hint-size="20px,20px"></x-import></span>
+            </a>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ signedOut }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="AEPDesignSystem_9eec25.Alert" tone="info" title="Giriş yaparsanız siparişleriniz, talepleriniz ve ödemeleriniz burada görünür" hint-size="100%,72px">Kişiselleştirilmiş yardım için hesabınıza giriş yapın; sipariş numarası olmadan da arama yapabilirsiniz.</x-import>
+      </sc-if>
+    </section>
+
+    <!-- Self-service tools -->
+    <section aria-labelledby="araclar-baslik" style="max-width:1296px;margin:0 auto;padding:32px clamp(16px,5vw,72px) 0;box-sizing:border-box;width:100%">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+        <h2 id="araclar-baslik" style="margin:0;font-size:1.5rem;font-weight:700">Hemen halledin</h2>
+        <p style="margin:0;color:rgb(8 6 22 / 66%)">Talep açmadan, kendi kendinize çözebileceğiniz işlemler</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,156px),1fr));gap:12px">
+        <sc-for list="{{ tools }}" as="t" hint-placeholder-count="6">
+          <a href="#" style="display:flex;flex-direction:column;gap:12px;padding:16px;min-height:44px;background:#FFFFFF;border-radius:8px;box-shadow:0 2px 8px rgb(0 0 0 / 10%);text-decoration:none;color:#080616;transition:box-shadow 200ms ease-out" style-hover="box-shadow:0 4px 12px rgb(0 0 0 / 12%)">
+            <span style="color:#003399;display:flex"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="{{ t.icon }}" size="24" hint-size="24px,24px"></x-import></span>
+            <span style="font-weight:500;text-wrap:pretty">{{ t.label }}</span>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- Journey categories -->
+    <section aria-labelledby="konular-baslik" style="max-width:1296px;margin:0 auto;padding:40px clamp(16px,5vw,72px) 0;box-sizing:border-box;width:100%">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+        <h2 id="konular-baslik" style="margin:0;font-size:1.5rem;font-weight:700">{{ catTitle }}</h2>
+        <p style="margin:0;color:rgb(8 6 22 / 66%)">Ticaret yolculuğunuzun adımına göre düzenlendi</p>
+      </div>
+      <ol style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px">
+        <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="8">
+          <li style="display:flex;flex-direction:column;background:#FFFFFF;border-radius:8px;box-shadow:0 2px 8px rgb(0 0 0 / 10%);overflow:hidden">
+            <a href="#" style="display:flex;gap:16px;padding:16px 16px 12px;text-decoration:none;color:#080616" style-hover="background:rgb(8 6 22 / 4%)">
+              <span style="display:flex;width:44px;height:44px;border-radius:8px;background:#F7F7FB;color:#003399;align-items:center;justify-content:center;flex:none">
+                <x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="{{ cat.icon }}" size="24" hint-size="24px,24px"></x-import>
+              </span>
+              <span style="display:flex;flex-direction:column;gap:4px;min-width:0;flex:1">
+                <span style="display:flex;align-items:center;gap:8px"><span style="color:rgb(8 6 22 / 66%);font-variant-numeric:tabular-nums">{{ cat.step }}</span><span style="font-weight:700;font-size:1.125rem">{{ cat.title }}</span></span>
+                <span style="color:rgb(8 6 22 / 66%);text-wrap:pretty">{{ cat.desc }}</span>
+              </span>
+              <span style="display:flex;color:rgb(8 6 22 / 66%);align-self:center"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="caret-right" size="20" mirror-rtl="{{ true }}" hint-size="20px,20px"></x-import></span>
+            </a>
+            <ul style="list-style:none;margin:0;padding:0 16px 8px;display:flex;flex-direction:column">
+              <sc-for list="{{ cat.links }}" as="l" hint-placeholder-count="3">
+                <li><a href="#" style="display:flex;align-items:center;gap:8px;min-height:44px;color:#003399;text-decoration:none;border-top:1px solid #E4E4EE" style-hover="text-decoration:underline;color:#080616"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="article" size="20" hint-size="20px,20px"></x-import><span>{{ l }}</span></a></li>
+              </sc-for>
+            </ul>
+            <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid #E4E4EE;color:#080616;text-decoration:none;font-weight:500;min-height:44px;box-sizing:border-box" style-hover="background:rgb(8 6 22 / 4%)"><span>Tüm makaleler</span><span style="color:rgb(8 6 22 / 66%);font-weight:400;font-variant-numeric:tabular-nums">{{ cat.count }} makale</span></a>
+          </li>
+        </sc-for>
+      </ol>
+    </section>
+
+    <!-- Trust & assurance -->
+    <section aria-labelledby="guven-baslik" style="max-width:1296px;margin:0 auto;padding:40px clamp(16px,5vw,72px) 0;box-sizing:border-box;width:100%">
+      <div style="background:#FFFFFF;border-radius:8px;box-shadow:0 2px 8px rgb(0 0 0 / 10%);padding:24px;display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <h2 id="guven-baslik" style="margin:0;font-size:1.5rem;font-weight:700">Ticaret güvencesi nasıl çalışır?</h2>
+          <p style="margin:0;color:rgb(8 6 22 / 66%);max-width:70ch;text-wrap:pretty">Sınır ötesi işlemlerde ödemeniz teslimat onayına kadar İstoc güvencesinde tutulur. Anlaşmazlıkta arabuluculuk 7 iş günü içinde sonuçlanır.</p>
+        </div>
+        <ol style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:16px">
+          <sc-for list="{{ trustSteps }}" as="st" hint-placeholder-count="4">
+            <li style="display:flex;flex-direction:column;gap:8px;padding:16px;background:#F7F7FB;border-radius:8px">
+              <span style="display:flex;align-items:center;gap:12px"><span aria-hidden="true" style="width:32px;height:32px;border-radius:999px;background:#FFB900;color:#080616;display:grid;place-items:center;font-weight:700;font-variant-numeric:tabular-nums">{{ st.n }}</span><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="{{ st.icon }}" size="24" hint-size="24px,24px"></x-import></span>
+              <span style="font-weight:500">{{ st.title }}</span>
+              <span style="color:rgb(8 6 22 / 66%);text-wrap:pretty">{{ st.desc }}</span>
+            </li>
+          </sc-for>
+        </ol>
+        <div><x-import component-from-global-scope="AEPDesignSystem_9eec25.Link" href="#" hint-size="auto,24px">Güvence politikasının tamamını okuyun</x-import></div>
+      </div>
+    </section>
+
+    <!-- Popular + regional -->
+    <section style="max-width:1296px;margin:0 auto;padding:40px clamp(16px,5vw,72px) 0;box-sizing:border-box;width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:24px">
+      <div aria-labelledby="populer-baslik" role="region" style="display:flex;flex-direction:column;gap:16px">
+        <h2 id="populer-baslik" style="margin:0;font-size:1.5rem;font-weight:700">Bu hafta en çok okunanlar</h2>
+        <ol style="list-style:none;margin:0;padding:0 8px;background:#FFFFFF;border-radius:8px;box-shadow:0 2px 8px rgb(0 0 0 / 10%)">
+          <sc-for list="{{ popular }}" as="p" hint-placeholder-count="6">
+            <li style="border-top:1px solid #E4E4EE">
+              <a href="#" style="display:flex;align-items:center;gap:12px;min-height:52px;padding:8px;text-decoration:none;color:#080616" style-hover="background:rgb(8 6 22 / 4%)">
+                <span style="color:rgb(8 6 22 / 66%);font-variant-numeric:tabular-nums;width:24px;text-align:end">{{ p.n }}</span>
+                <span style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:500;text-wrap:pretty">{{ p.title }}</span><span style="color:rgb(8 6 22 / 66%)">{{ p.meta }}</span></span>
+                <x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="caret-right" size="20" mirror-rtl="{{ true }}" hint-size="20px,20px"></x-import>
+              </a>
+            </li>
+          </sc-for>
+        </ol>
+      </div>
+      <div aria-labelledby="bolge-baslik" role="region" style="display:flex;flex-direction:column;gap:16px">
+        <h2 id="bolge-baslik" style="margin:0;font-size:1.5rem;font-weight:700">Bölgenize özel rehberler</h2>
+        <div style="background:#FFFFFF;border-radius:8px;box-shadow:0 2px 8px rgb(0 0 0 / 10%);padding:16px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap" role="group" aria-label="Bölge seçin">
+            <sc-for list="{{ regions }}" as="r" hint-placeholder-count="4">
+              <button type="button" aria-pressed="{{ r.active }}" onClick="{{ r.select }}" style="min-height:44px;padding:0 16px;border-radius:8px;border:1px solid {{ r.border }};background:{{ r.bg }};color:#080616;font:inherit;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px"><sc-if value="{{ r.active }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="check" size="20" hint-size="20px,20px"></x-import></sc-if><span>{{ r.label }}</span></button>
+            </sc-for>
+          </div>
+          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+            <sc-for list="{{ regionGuides }}" as="g" hint-placeholder-count="4">
+              <li><a href="#" style="display:flex;align-items:center;gap:12px;min-height:48px;color:#080616;text-decoration:none;border-top:1px solid #E4E4EE" style-hover="color:#003399"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="{{ g.icon }}" size="20" hint-size="20px,20px"></x-import><span style="flex:1">{{ g.title }}</span><span style="color:rgb(8 6 22 / 66%)">{{ g.lang }}</span></a></li>
+            </sc-for>
+          </ul>
+          <p style="margin:0;color:rgb(8 6 22 / 66%)">Rehberler Türkçe, İngilizce, Arapça ve Rusça olarak sunulur; Arapça sayfalar sağdan sola düzenlenir.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI assistant (bounded) -->
+    <sc-if value="{{ showAssistant }}" hint-placeholder-val="{{ true }}">
+      <section aria-labelledby="asistan-baslik" style="max-width:1296px;margin:0 auto;padding:40px clamp(16px,5vw,72px) 0;box-sizing:border-box;width:100%">
+        <div style="background:#FFFFFF;border-radius:8px;box-shadow:0 2px 8px rgb(0 0 0 / 10%);padding:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <h2 id="asistan-baslik" style="margin:0;font-size:1.5rem;font-weight:700">Yardım asistanına sorun</h2>
+              <x-import component-from-global-scope="AEPDesignSystem_9eec25.AIProvenanceBadge" model="İstoc Yardım Asistanı" hint-size="auto,28px">Yapay zekâ destekli</x-import>
+            </div>
+            <p style="margin:0;color:rgb(8 6 22 / 66%);text-wrap:pretty">Yanıtlar yalnızca yardım makalelerinden üretilir ve kaynak makale bağlantısıyla gelir. Sipariş, ödeme veya hesap işlemi yapmaz; gerektiğinde sizi bir temsilciye aktarır.</p>
+            <x-import component-from-global-scope="AEPDesignSystem_9eec25.PromptBar" placeholder="Örn. Kazakistan'a sevkiyat belgeleri" hint-size="100%,56px"></x-import>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;padding:16px;background:#F7F7FB;border-radius:8px">
+            <span style="font-weight:500">Asistan neyi yapamaz?</span>
+            <ul style="margin:0;padding-inline-start:20px;color:rgb(8 6 22 / 66%);display:flex;flex-direction:column;gap:4px">
+              <li>Sipariş iptali veya iade başlatamaz — bunun için “Hemen halledin” araçlarını kullanın.</li>
+              <li>Hesap bilgilerinize erişemez.</li>
+              <li>Hukuki veya gümrük danışmanlığı vermez.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- Contact channels -->
+    <section aria-labelledby="iletisim-baslik" style="max-width:1296px;margin:0 auto;padding:40px clamp(16px,5vw,72px) 48px;box-sizing:border-box;width:100%">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+        <h2 id="iletisim-baslik" style="margin:0;font-size:1.5rem;font-weight:700">Hâlâ yardıma mı ihtiyacınız var?</h2>
+        <span style="display:inline-flex;align-items:center;gap:8px;color:#15803D;font-weight:500"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="check-circle" size="20" weight="fill" hint-size="20px,20px"></x-import><span>Tüm sistemler çalışıyor</span><a href="#" style="color:#003399;font-weight:400">Sistem durumu</a></span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px">
+        <sc-for list="{{ channels }}" as="ch" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;gap:12px;padding:16px;background:#FFFFFF;border-radius:8px;box-shadow:0 2px 8px rgb(0 0 0 / 10%)">
+            <span style="display:flex;align-items:center;gap:12px"><span style="color:#003399;display:flex"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="{{ ch.icon }}" size="24" hint-size="24px,24px"></x-import></span><span style="font-weight:700;font-size:1.125rem">{{ ch.title }}</span></span>
+            <span style="display:inline-flex;align-items:center;gap:8px;color:rgb(8 6 22 / 66%)"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="clock" size="20" hint-size="20px,20px"></x-import><span style="font-variant-numeric:tabular-nums">{{ ch.sla }}</span></span>
+            <span style="color:rgb(8 6 22 / 66%);text-wrap:pretty;flex:1">{{ ch.desc }}</span>
+            <x-import component-from-global-scope="AEPDesignSystem_9eec25.Button" variant="{{ ch.variant }}" icon-start="{{ ch.icon }}" block="{{ true }}" hint-size="100%,44px">{{ ch.cta }}</x-import>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </main>
+
+  <!-- Feedback -->
+  <section aria-labelledby="geri-baslik" style="background:#FFFFFF;border-top:1px solid #E4E4EE">
+    <div style="max-width:1296px;margin:0 auto;padding:24px clamp(16px,5vw,72px);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <h2 id="geri-baslik" style="margin:0;font-size:1rem;font-weight:500">Bu sayfa aradığınızı bulmanıza yardımcı oldu mu?</h2>
+      <sc-if value="{{ noFeedback }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;gap:8px">
+          <x-import component-from-global-scope="AEPDesignSystem_9eec25.Button" variant="secondary" icon-start="thumbs-up" on-click="{{ fbYes }}" hint-size="auto,44px">Evet</x-import>
+          <x-import component-from-global-scope="AEPDesignSystem_9eec25.Button" variant="secondary" icon-start="thumbs-down" on-click="{{ fbNo }}" hint-size="auto,44px">Hayır</x-import>
+        </div>
+      </sc-if>
+      <sc-if value="{{ hasFeedback }}" hint-placeholder-val="{{ false }}">
+        <span role="status" style="display:inline-flex;align-items:center;gap:8px;color:#15803D;font-weight:500"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="check-circle" size="20" weight="fill" hint-size="20px,20px"></x-import><span>{{ feedbackMsg }}</span></span>
+      </sc-if>
+    </div>
+  </section>
+
+  <footer style="background:#080616;color:rgb(255 255 255 / 60%)">
+    <div style="max-width:1296px;margin:0 auto;padding:32px clamp(16px,5vw,72px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:24px">
+      <sc-for list="{{ footerCols }}" as="fc" hint-placeholder-count="4">
+        <nav aria-label="{{ fc.title }}" style="display:flex;flex-direction:column;gap:4px">
+          <span style="color:#FFFFFF;font-weight:500;min-height:44px;display:flex;align-items:center">{{ fc.title }}</span>
+          <sc-for list="{{ fc.links }}" as="fl" hint-placeholder-count="4">
+            <a href="#" style="color:rgb(255 255 255 / 60%);text-decoration:none;min-height:44px;display:flex;align-items:center" style-hover="color:#FFFFFF;text-decoration:underline">{{ fl }}</a>
+          </sc-for>
+        </nav>
+      </sc-for>
+    </div>
+    <div style="border-top:1px solid #26224A">
+      <div style="max-width:1296px;margin:0 auto;padding:16px clamp(16px,5vw,72px);display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+        <span>© 2026 İstoc Elektronik Ticaret A.Ş.</span>
+        <span style="display:inline-flex;align-items:center;gap:8px"><x-import component-from-global-scope="AEPDesignSystem_9eec25.Icon" name="person-arms-spread" size="20" hint-size="20px,20px"></x-import><a href="#" style="color:#FFFFFF">Erişilebilirlik bildirimi — WCAG 2.2 AA</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile bottom action bar -->
+  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset-inline:0;bottom:0;z-index:40;background:#FFFFFF;border-top:1px solid #E4E4EE;padding:8px 16px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <x-import component-from-global-scope="AEPDesignSystem_9eec25.Button" variant="secondary" icon-start="chat-circle-dots" block="{{ true }}" hint-size="100%,44px">Canlı destek</x-import>
+      <x-import component-from-global-scope="AEPDesignSystem_9eec25.Button" variant="primary" icon-start="ticket" block="{{ true }}" hint-size="100%,44px">Talep oluştur</x-import>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultRole&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;buyer&quot;,&quot;seller&quot;],&quot;default&quot;:&quot;buyer&quot;,&quot;tsType&quot;:&quot;'buyer'|'seller'&quot;,&quot;section&quot;:&quot;Bağlam&quot;},&quot;signedIn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Bağlam&quot;},&quot;showAssistant&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Bölümler&quot;}}">
+class Component extends DCLogic {
+  state = { role: null, query: '', region: 'mena', feedback: null, width: typeof window !== 'undefined' ? window.innerWidth : 1200 };
+  componentDidMount() {
+    this._r = () => this.setState({ width: window.innerWidth });
+    window.addEventListener('resize', this._r);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._r); }
+
+  data(role) {
+    const buyer = {
+      heroTitle: 'Alıcı olarak size nasıl yardımcı olabiliriz?',
+      heroSub: 'Tedarikçi bulmadan teslimata kadar her adımda rehberlik: doğrulanmış satıcılar, güvenli ödeme, gümrük ve iade.',
+      catTitle: 'Alıcı yolculuğuna göre konular',
+      quickChips: ['Sipariş takibi', 'İade başlat', 'Güvenli ödeme', 'Gümrük belgeleri', 'Fatura'],
+      tools: [
+        { icon: 'package', label: 'Siparişimi takip et' },
+        { icon: 'arrow-u-up-left', label: 'İade veya değişim başlat' },
+        { icon: 'scales', label: 'Anlaşmazlık aç' },
+        { icon: 'file-text', label: 'Fatura indir' },
+        { icon: 'seal-check', label: 'Tedarikçiyi doğrula' },
+        { icon: 'lock-key', label: 'Şifre veya 2FA sıfırla' },
+      ],
+      categories: [
+        { step: '01', icon: 'rocket-launch', title: 'Başlarken', desc: 'Hesap açma, şirket doğrulama, ilk sipariş.', count: 18, links: ['Kurumsal hesap nasıl açılır?', 'Vergi numarası doğrulaması ne kadar sürer?', 'İstoc ile Alibaba arasındaki farklar'] },
+        { step: '02', icon: 'magnifying-glass', title: 'Tedarikçi bulma ve doğrulama', desc: 'Arama, filtreler, doğrulanmış tedarikçi rozetleri.', count: 24, links: ['“Doğrulanmış üretici” rozeti ne anlama gelir?', 'Fabrika denetim raporu nasıl istenir?', 'Numune siparişi nasıl verilir?'] },
+        { step: '03', icon: 'chats-circle', title: 'Teklif isteme (RFQ) ve müzakere', desc: 'Teklif talebi, karşılaştırma, MOQ ve fiyat pazarlığı.', count: 21, links: ['Etkili bir RFQ nasıl yazılır?', 'Teklifleri yan yana karşılaştırma', 'Incoterms: EXW, FOB, CIF hangisini seçmeliyim?'] },
+        { step: '04', icon: 'credit-card', title: 'Sipariş ve güvenli ödeme', desc: 'Sözleşme, ödeme yöntemleri, ödeme güvencesi.', count: 32, links: ['Ödeme neden teslimata kadar tutulur?', 'Akreditif (L/C) ile ödeme yapabilir miyim?', 'Ödeme işlemim neden tamamlanmadı?'] },
+        { step: '05', icon: 'truck', title: 'Lojistik ve gümrük', desc: 'Sevkiyat takibi, gümrük belgeleri, vergiler.', count: 29, links: ['Sevkiyatımı nasıl takip ederim?', 'MENA ülkelerine ithalatta gereken belgeler', 'Gümrük vergisi tahmin aracı'] },
+        { step: '06', icon: 'shield-check', title: 'İade, iptal ve anlaşmazlık', desc: 'İade koşulları, hasarlı ürün, arabuluculuk süreci.', count: 27, links: ['Hasarlı ürün geldiğinde ne yapmalıyım?', 'Anlaşmazlık süreci adım adım', 'İade kargo ücretini kim öder?'] },
+        { step: '07', icon: 'user-circle', title: 'Hesap ve güvenlik', desc: 'Kullanıcılar, roller, iki adımlı doğrulama, dolandırıcılık.', count: 16, links: ['Ekip üyesi ekleme ve yetkiler', 'Şüpheli mesajları nasıl bildiririm?', 'Hesabımı nasıl kapatırım?'] },
+        { step: '08', icon: 'files', title: 'Uyum ve belgeler', desc: 'Menşe, uygunluk sertifikaları, KVKK ve veri.', count: 14, links: ['CE, TSE ve SASO sertifikaları', 'Menşe şahadetnamesi nasıl alınır?', 'Verilerim nerede saklanır?'] },
+      ],
+      popular: [
+        { title: 'Ödeme güvencesi kapsamında neler var, neler yok?', meta: 'Sipariş ve ödeme · 4 dk okuma' },
+        { title: 'Sevkiyat “gümrükte bekliyor” görünüyor, ne yapmalıyım?', meta: 'Lojistik · 3 dk okuma' },
+        { title: 'Tedarikçi numuneden farklı ürün gönderdi', meta: 'Anlaşmazlık · 5 dk okuma' },
+        { title: 'Birleşik Arap Emirlikleri’ne ithalatta KDV ve gümrük', meta: 'Bölgesel rehber · 6 dk okuma' },
+        { title: 'Teklif geçerlilik süresi doldu, ne olur?', meta: 'RFQ · 2 dk okuma' },
+        { title: 'Kurumsal fatura bilgilerini güncelleme', meta: 'Hesap · 2 dk okuma' },
+      ],
+    };
+    const seller = {
+      heroTitle: 'Satıcı olarak size nasıl yardımcı olabiliriz?',
+      heroSub: 'Mağaza açılışından ihracata kadar: ürün listeleme, RFQ yanıtlama, ödeme alma, lojistik ve performans.',
+      catTitle: 'Satıcı yolculuğuna göre konular',
+      quickChips: ['Ödeme takvimi', 'Ürün onayı', 'RFQ yanıtla', 'İhracat belgeleri', 'Komisyon'],
+      tools: [
+        { icon: 'wallet', label: 'Ödeme takvimimi gör' },
+        { icon: 'upload-simple', label: 'Toplu ürün yükle' },
+        { icon: 'chats-circle', label: 'Bekleyen RFQ’ları yanıtla' },
+        { icon: 'file-text', label: 'Komisyon faturası indir' },
+        { icon: 'seal-check', label: 'Doğrulama durumumu gör' },
+        { icon: 'chart-line-up', label: 'Performans raporum' },
+      ],
+      categories: [
+        { step: '01', icon: 'storefront', title: 'Mağaza açma ve doğrulama', desc: 'Başvuru, belge yükleme, doğrulanmış üretici rozeti.', count: 22, links: ['Satıcı başvurusu için gereken belgeler', 'Doğrulama neden reddedildi?', 'Üretici ile ticaret şirketi ayrımı'] },
+        { step: '02', icon: 'list-plus', title: 'Ürün listeleme ve katalog', desc: 'Ürün onayı, fiyat kademeleri, çoklu dil.', count: 31, links: ['Ürün onay kriterleri', 'Fiyat kademeleri ve MOQ tanımlama', 'Arapça ve Rusça ürün çevirileri'] },
+        { step: '03', icon: 'chats-circle', title: 'RFQ yanıtlama ve müzakere', desc: 'Teklif verme, yanıt süresi, kazanma oranı.', count: 19, links: ['Kazandıran teklif nasıl hazırlanır?', 'Yanıt süresi puanınızı nasıl etkiler?', 'Proforma fatura oluşturma'] },
+        { step: '04', icon: 'package', title: 'Sipariş yönetimi', desc: 'Onay, üretim durumu, kısmi sevkiyat.', count: 26, links: ['Siparişi onaylama ve üretim takvimi', 'Kısmi sevkiyat nasıl bildirilir?', 'Alıcı iptal talebini yanıtlama'] },
+        { step: '05', icon: 'wallet', title: 'Ödeme alma ve komisyon', desc: 'Ödeme takvimi, komisyon oranları, döviz.', count: 24, links: ['Ödeme ne zaman hesabıma geçer?', 'Komisyon oranları kategoriye göre', 'Döviz kuru ve transfer ücretleri'] },
+        { step: '06', icon: 'truck', title: 'Lojistik ve ihracat belgeleri', desc: 'İstoc lojistik, gümrük beyanı, menşe belgesi.', count: 28, links: ['İstoc Lojistik ile anlaşmalı sevkiyat', 'İhracat beyannamesi adımları', 'Türk Cumhuriyetleri’ne kara yolu sevkiyat'] },
+        { step: '07', icon: 'chart-line-up', title: 'Performans ve görünürlük', desc: 'Satıcı puanı, reklam, öne çıkan ürün.', count: 17, links: ['Satıcı puanı nasıl hesaplanır?', 'Reklam kampanyası oluşturma', 'Mağaza vitrinini düzenleme'] },
+        { step: '08', icon: 'scales', title: 'Anlaşmazlık ve politikalar', desc: 'İade talepleri, arabuluculuk, yasaklı ürünler.', count: 15, links: ['İade talebine itiraz etme', 'Yasaklı ve kısıtlı ürünler listesi', 'Fikri mülkiyet şikâyetleri'] },
+      ],
+      popular: [
+        { title: 'Ödeme neden “beklemede” görünüyor?', meta: 'Ödeme alma · 3 dk okuma' },
+        { title: 'Ürünüm onaylanmadı: en sık 7 neden', meta: 'Katalog · 4 dk okuma' },
+        { title: 'Suudi Arabistan’a ihracatta SABER kaydı', meta: 'Bölgesel rehber · 6 dk okuma' },
+        { title: 'RFQ’ya 24 saat içinde yanıt vermenin etkisi', meta: 'RFQ · 2 dk okuma' },
+        { title: 'Alıcı ürünü teslim aldı ama onaylamadı', meta: 'Sipariş yönetimi · 3 dk okuma' },
+        { title: 'Komisyon faturası ve KDV iadesi', meta: 'Ödeme alma · 5 dk okuma' },
+      ],
+    };
+    return role === 'seller' ? seller : buyer;
+  }
+
+  renderVals() {
+    const role = this.state.role || this.props.defaultRole || 'buyer';
+    const signedIn = this.props.signedIn ?? true;
+    const d = this.data(role);
+    const q = this.state.query.trim().toLowerCase();
+    const pool = [
+      ...d.categories.flatMap(c => c.links.map(l => ({ label: l, kind: 'Makale', icon: 'article' }))),
+      ...d.tools.map(t => ({ label: t.label, kind: 'İşlem', icon: t.icon })),
+    ];
+    const suggestions = q.length >= 2 ? pool.filter(p => p.label.toLowerCase().includes(q)).slice(0, 6) : [];
+    const regionsAll = [
+      { id: 'mena', label: 'Orta Doğu ve Kuzey Afrika' }, { id: 'turkic', label: 'Türk Cumhuriyetleri' }, { id: 'eu', label: 'Avrupa Birliği' }, { id: 'global', label: 'Diğer' },
+    ];
+    const guidesBy = {
+      mena: [{ icon: 'file-text', title: 'BAE ve Suudi Arabistan ithalat belgeleri', lang: 'TR · AR · EN' }, { icon: 'seal-check', title: 'SASO / SABER uygunluk kaydı', lang: 'TR · AR' }, { icon: 'bank', title: 'Akreditif ve İslami finans ödemeleri', lang: 'TR · AR · EN' }, { icon: 'truck', title: 'Mersin–Cidde deniz yolu süreleri', lang: 'TR · EN' }],
+      turkic: [{ icon: 'file-text', title: 'Kazakistan ve Özbekistan gümrük beyanı', lang: 'TR · RU' }, { icon: 'truck', title: 'Kara yolu sevkiyat ve TIR karnesi', lang: 'TR · RU · EN' }, { icon: 'bank', title: 'Avrasya Ekonomik Birliği vergileri', lang: 'TR · RU' }, { icon: 'seal-check', title: 'EAC sertifikası nasıl alınır?', lang: 'TR · RU' }],
+      eu: [{ icon: 'seal-check', title: 'CE işareti ve uygunluk beyanı', lang: 'TR · EN · DE' }, { icon: 'file-text', title: 'ATR dolaşım belgesi', lang: 'TR · EN' }, { icon: 'bank', title: 'OSS ve ithalat KDV’si', lang: 'TR · EN · DE' }, { icon: 'truck', title: 'Kapıkule geçiş ve süreler', lang: 'TR · EN' }],
+      global: [{ icon: 'file-text', title: 'Genel ihracat belgeleri kontrol listesi', lang: 'TR · EN' }, { icon: 'bank', title: 'SWIFT ve döviz transferleri', lang: 'TR · EN' }, { icon: 'truck', title: 'Konteyner ve hava kargo karşılaştırması', lang: 'TR · EN' }, { icon: 'seal-check', title: 'Ülke bazlı uygunluk gereksinimleri', lang: 'EN' }],
+    };
+    const fb = this.state.feedback;
+    const isMobile = this.state.width < 768;
+    return {
+      ...d,
+      isBuyer: role === 'buyer', isSeller: role === 'seller',
+      buyerBg: role === 'buyer' ? '#FFB900' : 'transparent', buyerFg: role === 'buyer' ? '#080616' : '#FFFFFF',
+      sellerBg: role === 'seller' ? '#FFB900' : 'transparent', sellerFg: role === 'seller' ? '#080616' : '#FFFFFF',
+      setBuyer: () => this.setState({ role: 'buyer' }), setSeller: () => this.setState({ role: 'seller' }),
+      signedIn, signedOut: !signedIn,
+      query: this.state.query,
+      onQuery: e => this.setState({ query: e.target.value }),
+      onSearch: e => { e.preventDefault(); },
+      suggestions, hasSuggestions: suggestions.length > 0,
+      liveMsg: q.length >= 2 ? `${suggestions.length} öneri bulundu` : '',
+      contextCards: role === 'buyer' ? [
+        { icon: 'package', eyebrow: 'Son siparişiniz', title: 'IS-2026-48113 · Endüstriyel vana, 240 adet', status: 'Gümrükte bekliyor', statusIcon: 'warning', color: '#B45309', fill: 'rgb(180 83 9 / 10%)' },
+        { icon: 'ticket', eyebrow: 'Açık talepleriniz', title: '2 talep · Son yanıt 3 saat önce', status: 'Yanıt bekleniyor', statusIcon: 'clock', color: '#1D4ED8', fill: 'rgb(29 78 216 / 10%)' },
+        { icon: 'shield-check', eyebrow: 'Ödeme güvencesi', title: '₺184.500 güvence altında', status: 'Teslimat onayına kadar tutuluyor', statusIcon: 'check-circle', color: '#15803D', fill: 'rgb(21 128 61 / 10%)' },
+      ] : [
+        { icon: 'wallet', eyebrow: 'Bir sonraki ödeme', title: '₺412.300 · 9 Eylül 2026', status: 'Planlandı', statusIcon: 'check-circle', color: '#15803D', fill: 'rgb(21 128 61 / 10%)' },
+        { icon: 'chats-circle', eyebrow: 'Bekleyen RFQ', title: '5 teklif talebi yanıt bekliyor', status: '2’si 24 saat içinde dolacak', statusIcon: 'warning', color: '#B45309', fill: 'rgb(180 83 9 / 10%)' },
+        { icon: 'list-plus', eyebrow: 'Ürün onayı', title: '3 ürün incelemede', status: 'Ortalama 1 iş günü', statusIcon: 'clock', color: '#1D4ED8', fill: 'rgb(29 78 216 / 10%)' },
+      ],
+      trustSteps: [
+        { n: '1', icon: 'handshake', title: 'Sözleşme oluşturulur', desc: 'Fiyat, adet, Incoterm ve teslim tarihi platformda kayıt altına alınır.' },
+        { n: '2', icon: 'lock-key', title: 'Ödeme güvenceye alınır', desc: 'Alıcı öder; tutar satıcıya değil İstoc güvence hesabına geçer.' },
+        { n: '3', icon: 'truck', title: 'Sevkiyat izlenir', desc: 'Her aşama iki tarafa da bildirilir; belgeler tek yerde toplanır.' },
+        { n: '4', icon: 'check-circle', title: 'Onay ve serbest bırakma', desc: 'Alıcı teslimatı onaylar ya da 7 gün içinde anlaşmazlık açar.' },
+      ],
+      popular: d.popular.map((p, i) => ({ ...p, n: String(i + 1) })),
+      regions: regionsAll.map(r => ({ ...r, active: r.id === this.state.region, select: () => this.setState({ region: r.id }), bg: r.id === this.state.region ? 'rgb(0 51 153 / 8%)' : '#FFFFFF', border: r.id === this.state.region ? '#003399' : '#E4E4EE' })),
+      regionGuides: guidesBy[this.state.region],
+      showAssistant: this.props.showAssistant ?? true,
+      channels: [
+        { icon: 'chat-circle-dots', title: 'Canlı destek', sla: '7/24 · ortalama 2 dk', desc: 'Sipariş, ödeme ve hesap sorunları için en hızlı yol. Türkçe, İngilizce, Arapça.', cta: 'Sohbet başlat', variant: 'primary' },
+        { icon: 'ticket', title: 'Destek talebi', sla: 'İlk yanıt 4 saat içinde', desc: 'Belge veya ekran görüntüsü gerektiren konular. Talebinizi buradan takip edersiniz.', cta: 'Talep oluştur', variant: 'secondary' },
+        { icon: 'phone', title: 'Telefon', sla: 'Hafta içi 09.00–18.00 (TSİ)', desc: '0850 000 00 00 · Yurt dışından +90 212 000 00 00. Görüşme kaydı talebinize eklenir.', cta: 'Numarayı ara', variant: 'secondary' },
+        { icon: 'users-three', title: 'Ticaret topluluğu', sla: 'Yanıtlar üyelerden', desc: 'Diğer alıcı ve satıcıların deneyimleri; İstoc uzmanları doğrulanmış yanıtları işaretler.', cta: 'Topluluğa git', variant: 'secondary' },
+      ],
+      noFeedback: !fb, hasFeedback: !!fb,
+      feedbackMsg: fb === 'yes' ? 'Teşekkürler, geri bildiriminiz kaydedildi.' : 'Teşekkürler. Eksik bulduğunuz konuyu destek talebinde belirtebilirsiniz.',
+      fbYes: () => this.setState({ feedback: 'yes' }), fbNo: () => this.setState({ feedback: 'no' }),
+      footerCols: [
+        { title: 'Alıcılar', links: ['Alıcı rehberi', 'Ödeme güvencesi', 'Gümrük ve vergiler', 'İade politikası'] },
+        { title: 'Satıcılar', links: ['Satıcı olun', 'Komisyon ve ücretler', 'Doğrulama programı', 'Satıcı akademisi'] },
+        { title: 'Politikalar', links: ['Kullanım koşulları', 'Gizlilik ve KVKK', 'Yasaklı ürünler', 'Fikri mülkiyet'] },
+        { title: 'İstoc', links: ['Hakkımızda', 'Sistem durumu', 'Basın', 'İletişim'] },
+      ],
+      isMobile, bottomPad: isMobile ? '72px' : '0px',
+    };
+  }
+}
+</script>
+</body>
+</html>
